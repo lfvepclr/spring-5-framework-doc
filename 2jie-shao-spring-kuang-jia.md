@@ -33,11 +33,7 @@ _图2.1 Spring框架概述_
 
 以下部分列出了每个可用模块，以及它们的工件名称和它们支持的主要功能。工件的名字对应的是
 
-_工件标识符，使用在_
-
-[依赖管理工具](http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/html/overview.html#dependency-management)
-
-中。
+_工件标识符，使用在_[依赖管理工具](http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/html/overview.html#dependency-management)中。
 
 ### 2.2.1核心容器
 
@@ -154,17 +150,13 @@ _表2.1  Spring框架的Artifacts_
 | org.springframework | spring-webmvc | REST Web Services and model-view-controller implementation for web applications |
 | org.springframework | spring-websocket | WebSocket and SockJS implementations, including STOMP support |
 
-#### \*\*Spring的依赖和依赖于Spring
-
-\*\*
+#### Spring的依赖和依赖于Spring
 
 虽然Spring为大量企业和其他外部工具提供集成和支持，但它有意将其强制性的依赖保持在最低限度：在使用Spring用于简单的用例时，您不必定位和下载（甚至自动的去做）大量的jar库。对于基本依赖注入功能，只有一个强制性的外部依赖关系，也就是用于日志记录的依赖（有关日志记录选项的更详细描述，请参阅下文）。
 
 接下来，我们概述了配置依赖于Spring的应用程序所需的基本步骤，首先是使用Maven，然后使用Gradle，最后使用Ivy。在任何情况下，如果不清楚，请参阅依赖关系管理系统的文档，或查看一些示例代码 – Spring本身在构建时使用Gradle来管理依赖关系，我们的示例主要使用Gradle或Maven。
 
-#### \*\*Maven的依赖管理
-
-\*\*
+#### Maven的依赖管理
 
 如果您使用Maven进行依赖关系管理，则甚至不需要显式提供依赖关系。 例如，要创建应用程序上下文并使用依赖注入来配置应用程序，您的Maven依赖配置如下所示：
 
