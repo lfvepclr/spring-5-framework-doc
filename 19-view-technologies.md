@@ -1,24 +1,22 @@
 # 19. 视图技术
 
-## 19.1 简介
+## 19.1 简介
 
-Spring架构与其他MVC框架所不同的重要一点是视图技术，比如  , 决定使用Groovy Markup Templates 或者Thymeleaf代替JSP仅仅是配置的问题 . 这个章节主要设计主流的视图技术，以及简单提及怎样使用新的技术。这个章节假设你已经熟悉第18.5节[“Resolving views”](http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/html/mvc.html#mvc-viewresolver) ，该章节涵盖了视图怎样与MVC框架结合的基本知识。
+Spring架构与其他MVC框架所不同的重要一点是视图技术，比如  , 决定使用Groovy Markup Templates 或者Thymeleaf代替JSP仅仅是配置的问题 . 这个章节主要设计主流的视图技术，以及简单提及怎样使用新的技术。这个章节假设你已经熟悉第18.5节[“Resolving views”](http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/html/mvc.html#mvc-viewresolver) ，该章节涵盖了视图怎样与MVC框架结合的基本知识。
 
-
-
-## 19.2 Thymeleaf
+## 19.2 Thymeleaf
 
 [Thymeleaf](http://www.thymeleaf.org/)是一种与MVC架构结合很好的视图技术. 不仅仅Spring团队而且Thymeleaf 自身也提供了很好的支持。
 
-配置Thymeleaf 对Spring的支持通常需要定义几个bean, 像`ServletContextTemplateResolver`,  `SpringTemplateEngine`和 `ThymeleafViewResolver`。如需要更多详细信息请点击文档 [Thymeleaf+Spring](http://www.thymeleaf.org/documentation.html)。
+配置Thymeleaf 对Spring的支持通常需要定义几个bean, 像`ServletContextTemplateResolver`,  `SpringTemplateEngine`和 `ThymeleafViewResolver`。如需要更多详细信息请点击文档 [Thymeleaf+Spring](http://www.thymeleaf.org/documentation.html)。
 
-## 19.3 Groovy Markup Templates
+## 19.3 Groovy Markup Templates
 
-[Groovy Markup Template Engine](http://groovy-lang.org/templating.html#_the_markuptemplateengine)  是另一种被Spring支持的视图技术,此模板引擎是一种主要用于生成类似XML的标记（XML，XHTML，HTML5，…）的模板引擎，但可用于生成任何基于文本的内容。
+[Groovy Markup Template Engine](http://groovy-lang.org/templating.html#_the_markuptemplateengine)  是另一种被Spring支持的视图技术,此模板引擎是一种主要用于生成类似XML的标记（XML，XHTML，HTML5，…）的模板引擎，但可用于生成任何基于文本的内容。
 
 这需要在classpath上配置Groovy 2.3.1+。
 
-### 19.3.1 配置
+### 19.3.1 配置
 
 配置 Groovy Markup Template Engine相当容易:
 
@@ -28,16 +26,16 @@ Spring架构与其他MVC框架所不同的重要一点是视图技术，比如 �
 public class WebConfig extends WebMvcConfigurerAdapter {
 
        @Override
-	public void configureViewResolvers(ViewResolverRegistry registry) {
-		registry.groovy();
-	}
+    public void configureViewResolvers(ViewResolverRegistry registry) {
+        registry.groovy();
+    }
 
-	@Bean
-	public GroovyMarkupConfigurer groovyMarkupConfigurer() {
-		GroovyMarkupConfigurer configurer = new GroovyMarkupConfigurer();
-		configurer.setResourceLoaderPath("/WEB-INF/");
-		return configurer;
-	}
+    @Bean
+    public GroovyMarkupConfigurer groovyMarkupConfigurer() {
+        GroovyMarkupConfigurer configurer = new GroovyMarkupConfigurer();
+        configurer.setResourceLoaderPath("/WEB-INF/");
+        return configurer;
+    }
 }
 ```
 
@@ -47,34 +45,34 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 <mvc:annotation-driven/>
 
 <mvc:view-resolvers>
-	<mvc:groovy/>
+    <mvc:groovy/>
 </mvc:view-resolvers>
 
 <mvc:groovy-configurer resource-loader-path="/WEB-INF/"/>
 ```
 
-### 19.3.2 例子
+### 19.3.2 例子
 
 和传统模板引擎不同, 这一个依赖于使用构建器语法的DSL。 以下是HTML页面的示例模板:
 
 ```
 yieldUnescaped '<!DOCTYPE html>'
 html(lang:'en') {
-	head {
-		meta('http-equiv':'"Content-Type" content="text/html; charset=utf-8"')
-		title('My page')
-	}
-	body {
-		p('This is an example of HTML contents')
-	}
+    head {
+        meta('http-equiv':'"Content-Type" content="text/html; charset=utf-8"')
+        title('My page')
+    }
+    body {
+        p('This is an example of HTML contents')
+    }
 }
 ```
 
-## 19.4 FreeMarker
+## 19.4 FreeMarker
 
-FreeMarker是一种模板语言，可以用作Spring MVC应用程序中的视图技术. 更多关于模板语言的信息，请点击站点 [FreeMarker](http://www.freemarker.org/) .
+FreeMarker是一种模板语言，可以用作Spring MVC应用程序中的视图技术. 更多关于模板语言的信息，请点击站点 [FreeMarker](http://www.freemarker.org/) .
 
-### 19.4.1 依赖
+### 19.4.1 依赖
 
 您的Web应用程序需要包含freemarker-2.x.jar才能使用FreeMarker。 通常这包含在WEB-INF / lib文件夹中，其中jar保证由Java EE服务器找到并添加到应用程序的类路径中。 当然，假设你已经有spring-webmvc.jar在你的’WEB-INF / lib’目录了！
 
@@ -85,7 +83,7 @@ FreeMarker是一种模板语言，可以用作Spring MVC应用程序中的视图
 ```
 <!-- freemarker config -->
 <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
-	<property name="templateLoaderPath" value="/WEB-INF/freemarker/"/>
+    <property name="templateLoaderPath" value="/WEB-INF/freemarker/"/>
 </bean>
 
 <!--
@@ -93,15 +91,15 @@ View resolvers can also be configured with ResourceBundles or XML files. If you 
 different view resolving based on Locale, you have to use the resource bundle resolver.
 -->
 <bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
-	<property name="cache" value="true"/>
-	<property name="prefix" value=""/>
-	<property name="suffix" value=".ftl"/>
+    <property name="cache" value="true"/>
+    <property name="prefix" value=""/>
+    <property name="suffix" value=".ftl"/>
 </bean>
 ```
 
 > 对于非web项目，在你定义的上下文中增加`FreeMarkerConfigurationFactoryBean`
 
-### 19.4.3 创建模板
+### 19.4.3 创建模板
 
 您的模板需要存储在上面显示的FreeMarkerConfigurer指定的目录中。 如果您使用突出显示的视图解析器，则逻辑视图名称与模板文件名称以类似于JSP的InternalResourceViewResolver的方式相关。 因此，如果您的控制器返回一个包含视图名称为“welcome”的ModelAndView对象，则解析器将查找/WEB-INF/freemarker/welcome.ftl模板。
 
@@ -111,12 +109,12 @@ FreeMarker的’Settings’和’SharedVariables’可以直接传递给由Sprin
 
 ```
 <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
-	<property name="templateLoaderPath" value="/WEB-INF/freemarker/"/>
-	<property name="freemarkerVariables">
-		<map>
-			<entry key="xml_escape" value-ref="fmXmlEscape"/>
-		</map>
-	</property>
+    <property name="templateLoaderPath" value="/WEB-INF/freemarker/"/>
+    <property name="freemarkerVariables">
+        <map>
+            <entry key="xml_escape" value-ref="fmXmlEscape"/>
+        </map>
+    </property>
 </bean>
 
 <bean id="fmXmlEscape" class="freemarker.template.utility.XmlEscape"/>
@@ -124,7 +122,7 @@ FreeMarker的’Settings’和’SharedVariables’可以直接传递给由Sprin
 
 > 有关设置和变量的详细信息，请参阅FreeMarker文档，因为它们适用于Configuration对象。
 
-###  19.4.5绑定支持和表单处理
+### 19.4.5绑定支持和表单处理
 
 Spring提供了一个用于JSP的标签库，其中包含（其中包含）&lt;spring：bind /&gt;标签。 此标记主要允许表单从表单支持对象显示值，并显示来自网络或业务层的验证程序的失败验证结果。 Spring还支持FreeMarker中的相同功能，还有其他方便的宏用于生成表单输入元素。
 
@@ -143,19 +141,19 @@ Spring提供了一个用于JSP的标签库，其中包含（其中包含）&lt;s
 recommend sticking to 'spring' -->
 <#import "/spring.ftl" as spring/>
 <html>
-	...
-	<form action="" method="POST">
-		Name:
-		<@spring.bind "myModelObject.name"/>
-		<input type="text"
-			name="${spring.status.expression}"
-			value="${spring.status.value?html}"/><br>
-		<#list spring.status.errorMessages as error> <b>${error}</b> <br> </#list>
-		<br>
-		...
-		<input type="submit" value="submit"/>
-	</form>
-	...
+    ...
+    <form action="" method="POST">
+        Name:
+        <@spring.bind "myModelObject.name"/>
+        <input type="text"
+            name="${spring.status.expression}"
+            value="${spring.status.value?html}"/><br>
+        <#list spring.status.errorMessages as error> <b>${error}</b> <br> </#list>
+        <br>
+        ...
+        <input type="submit" value="submit"/>
+    </form>
+    ...
 </html>
 ```
 
@@ -211,14 +209,14 @@ showErrors宏采用一个分隔符参数（用于在给定字段上分隔多个�
 Name:
 <input type="text" name="name" value="">
 <br>
-	<b>required</b>
+    <b>required</b>
 <br>
 <br>
 ```
 
 formTextarea宏的工作方式与formInput宏相同，并接受相同的参数列表。 通常，第二个参数（属性）将用于传递文本区域的样式信息或行和列属性。
 
-####  选择字段
+#### 选择字段
 
 四个选择字段宏可用于在HTML表单中生成常见的UI值选择输入。
 
@@ -246,14 +244,14 @@ Town:
 
 ```
 protected Map<String, String> referenceData(HttpServletRequest request) throws Exception {
-	Map<String, String> cityMap = new LinkedHashMap<>();
-	cityMap.put("LDN", "London");
-	cityMap.put("PRS", "Paris");
-	cityMap.put("NYC", "New York");
+    Map<String, String> cityMap = new LinkedHashMap<>();
+    cityMap.put("LDN", "London");
+    cityMap.put("PRS", "Paris");
+    cityMap.put("NYC", "New York");
 
-	Map<String, String> model = new HashMap<>();
-	model.put("cityMap", cityMap);
-	return model;
+    Map<String, String> model = new HashMap<>();
+    model.put("cityMap", cityMap);
+    return model;
 }
 ```
 
@@ -292,7 +290,7 @@ Town:
 <#-- all future fields will be bound with HTML escaping off -->
 ```
 
-## 19.5 JSP & JSTL
+## 19.5 JSP & JSTL
 
 Spring为JSP和JSTL视图提供了几个开箱即用的解决方案。 使用JSP或JSTL是使用在WebApplicationContext中定义的常规视图解析器完成的。 此外，当然，您需要编写一些实际渲染视图的JSP。
 
@@ -300,7 +298,7 @@ Spring为JSP和JSTL视图提供了几个开箱即用的解决方案。 使用JSP
 >
 > [How to Reference and Use JSTL in your Web Application](http://www.mularien.com/blog/2008/04/24/how-to-reference-and-use-jstl-in-your-web-application/)
 >
-> 提供了常见的陷阱和如何避免它们的有用指南。 请注意，从Spring 3.0开始，最小支持的servlet版本为2.4（JSP 2.0和JSTL 1.1），这有助于减少混淆的范围。
+> 提供了常见的陷阱和如何避免它们的有用指南。 请注意，从Spring 3.0开始，最小支持的servlet版本为2.4（JSP 2.0和JSTL 1.1），这有助于减少混淆的范围。
 
 ### 19.5.1 视图解析
 
@@ -309,7 +307,7 @@ Spring为JSP和JSTL视图提供了几个开箱即用的解决方案。 使用JSP
 ```
 <!-- the ResourceBundleViewResolver -->
 <bean id="viewResolver" class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
-	<property name="basename" value="views"/>
+    <property name="basename" value="views"/>
 </bean>
 
 # And a sample properties file is uses (views.properties in WEB-INF/classes):
@@ -324,19 +322,19 @@ productList.url=/WEB-INF/jsp/productlist.jsp
 
 ```
 <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-	<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
-	<property name="prefix" value="/WEB-INF/jsp/"/>
-	<property name="suffix" value=".jsp"/>
+    <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+    <property name="prefix" value="/WEB-INF/jsp/"/>
+    <property name="suffix" value=".jsp"/>
 </bean>
 ```
 
 InternalResourceBundleViewResolver可以配置为如上所述使用JSP。 作为最佳做法，我们强烈建议您将JSP文件放在“WEB-INF”目录下的目录中，以免客户端直接访问。
 
-### 19.5.2 ‘Plain-old’ JSPs 与JSTL
+### 19.5.2 ‘Plain-old’ JSPs 与JSTL
 
 当使用Java标准标签库时，必须使用特殊的视图类JstlView，因为JSTL需要一些准备工作，例如I18N功能才能正常工作。
 
-### 19.5.3 Additional tags facilitating development
+### 19.5.3 Additional tags facilitating development
 
 Spring提供了请求参数到命令对象的数据绑定，如前几章所述。 为了方便JSP页面的开发与这些数据绑定功能的结合，Spring提供了一些使事情更容易的标签。 所有Spring标签都具有HTML转义功能，以启用或禁用字符转义。
 
@@ -368,21 +366,21 @@ Spring提供了请求参数到命令对象的数据绑定，如前几章所述�
 
 ```
 <form:form>
-	<table>
-		<tr>
-			<td>First Name:</td>
-			<td><form:input path="firstName"/></td>
-		</tr>
-		<tr>
-			<td>Last Name:</td>
-			<td><form:input path="lastName"/></td>
-		</tr>
-		<tr>
-			<td colspan="2">
-				<input type="submit" value="Save Changes"/>
-			</td>
-		</tr>
-	</table>
+    <table>
+        <tr>
+            <td>First Name:</td>
+            <td><form:input path="firstName"/></td>
+        </tr>
+        <tr>
+            <td>Last Name:</td>
+            <td><form:input path="lastName"/></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="Save Changes"/>
+            </td>
+        </tr>
+    </table>
 </form:form>
 ```
 
@@ -392,21 +390,21 @@ firstName和lastName值由页面控制器从PageContext中放置的命令对象�
 
 ```
 <form method="POST">
-	<table>
-		<tr>
-			<td>First Name:</td>
-			<td><input name="firstName" type="text" value="Harry"/></td>
-		</tr>
-		<tr>
-			<td>Last Name:</td>
-			<td><input name="lastName" type="text" value="Potter"/></td>
-		</tr>
-		<tr>
-			<td colspan="2">
-				<input type="submit" value="Save Changes"/>
-			</td>
-		</tr>
-	</table>
+    <table>
+        <tr>
+            <td>First Name:</td>
+            <td><input name="firstName" type="text" value="Harry"/></td>
+        </tr>
+        <tr>
+            <td>Last Name:</td>
+            <td><input name="lastName" type="text" value="Potter"/></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="Save Changes"/>
+            </td>
+        </tr>
+    </table>
 </form>
 ```
 
@@ -414,21 +412,21 @@ firstName和lastName值由页面控制器从PageContext中放置的命令对象�
 
 ```
 <form:form modelAttribute="user">
-	<table>
-		<tr>
-			<td>First Name:</td>
-			<td><form:input path="firstName"/></td>
-		</tr>
-		<tr>
-			<td>Last Name:</td>
-			<td><form:input path="lastName"/></td>
-		</tr>
-		<tr>
-			<td colspan="2">
-				<input type="submit" value="Save Changes"/>
-			</td>
-		</tr>
-	</table>
+    <table>
+        <tr>
+            <td>First Name:</td>
+            <td><form:input path="firstName"/></td>
+        </tr>
+        <tr>
+            <td>Last Name:</td>
+            <td><form:input path="lastName"/></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="Save Changes"/>
+            </td>
+        </tr>
+    </table>
 </form:form>
 ```
 
@@ -443,33 +441,33 @@ firstName和lastName值由页面控制器从PageContext中放置的命令对象�
 ```
 public class Preferences {
 
-	private boolean receiveNewsletter;
-	private String[] interests;
-	private String favouriteWord;
+    private boolean receiveNewsletter;
+    private String[] interests;
+    private String favouriteWord;
 
-	public boolean isReceiveNewsletter() {
-		return receiveNewsletter;
-	}
+    public boolean isReceiveNewsletter() {
+        return receiveNewsletter;
+    }
 
-	public void setReceiveNewsletter(boolean receiveNewsletter) {
-		this.receiveNewsletter = receiveNewsletter;
-	}
+    public void setReceiveNewsletter(boolean receiveNewsletter) {
+        this.receiveNewsletter = receiveNewsletter;
+    }
 
-	public String[] getInterests() {
-		return interests;
-	}
+    public String[] getInterests() {
+        return interests;
+    }
 
-	public void setInterests(String[] interests) {
-		this.interests = interests;
-	}
+    public void setInterests(String[] interests) {
+        this.interests = interests;
+    }
 
-	public String getFavouriteWord() {
-		return favouriteWord;
-	}
+    public String getFavouriteWord() {
+        return favouriteWord;
+    }
 
-	public void setFavouriteWord(String favouriteWord) {
-		this.favouriteWord = favouriteWord;
-	}
+    public void setFavouriteWord(String favouriteWord) {
+        this.favouriteWord = favouriteWord;
+    }
 }
 ```
 
@@ -477,31 +475,31 @@ The form.jsp would look like:
 
 ```
 <form:form>
-	<table>
-		<tr>
-			<td>Subscribe to newsletter?:</td>
-			<%-- Approach 1: Property is of type java.lang.Boolean --%>
-			<td><form:checkbox path="preferences.receiveNewsletter"/></td>
-		</tr>
+    <table>
+        <tr>
+            <td>Subscribe to newsletter?:</td>
+            <%-- Approach 1: Property is of type java.lang.Boolean --%>
+            <td><form:checkbox path="preferences.receiveNewsletter"/></td>
+        </tr>
 
-		<tr>
-			<td>Interests:</td>
-			<%-- Approach 2: Property is of an array or of type java.util.Collection --%>
-			<td>
-				Quidditch: <form:checkbox path="preferences.interests" value="Quidditch"/>
-				Herbology: <form:checkbox path="preferences.interests" value="Herbology"/>
-				Defence Against the Dark Arts: <form:checkbox path="preferences.interests" value="Defence Against the Dark Arts"/>
-			</td>
-		</tr>
+        <tr>
+            <td>Interests:</td>
+            <%-- Approach 2: Property is of an array or of type java.util.Collection --%>
+            <td>
+                Quidditch: <form:checkbox path="preferences.interests" value="Quidditch"/>
+                Herbology: <form:checkbox path="preferences.interests" value="Herbology"/>
+                Defence Against the Dark Arts: <form:checkbox path="preferences.interests" value="Defence Against the Dark Arts"/>
+            </td>
+        </tr>
 
-		<tr>
-			<td>Favourite Word:</td>
-			<%-- Approach 3: Property is of type java.lang.Object --%>
-			<td>
-				Magic: <form:checkbox path="preferences.favouriteWord" value="Magic"/>
-			</td>
-		</tr>
-	</table>
+        <tr>
+            <td>Favourite Word:</td>
+            <%-- Approach 3: Property is of type java.lang.Object --%>
+            <td>
+                Magic: <form:checkbox path="preferences.favouriteWord" value="Magic"/>
+            </td>
+        </tr>
+    </table>
 </form:form>
 ```
 
@@ -515,15 +513,15 @@ The form.jsp would look like:
 
 ```
 <tr>
-	<td>Interests:</td>
-	<td>
-		Quidditch: <input name="preferences.interests" type="checkbox" value="Quidditch"/>
-		<input type="hidden" value="1" name="_preferences.interests"/>
-		Herbology: <input name="preferences.interests" type="checkbox" value="Herbology"/>
-		<input type="hidden" value="1" name="_preferences.interests"/>
-		Defence Against the Dark Arts: <input name="preferences.interests" type="checkbox" value="Defence Against the Dark Arts"/>
-		<input type="hidden" value="1" name="_preferences.interests"/>
-	</td>
+    <td>Interests:</td>
+    <td>
+        Quidditch: <input name="preferences.interests" type="checkbox" value="Quidditch"/>
+        <input type="hidden" value="1" name="_preferences.interests"/>
+        Herbology: <input name="preferences.interests" type="checkbox" value="Herbology"/>
+        <input type="hidden" value="1" name="_preferences.interests"/>
+        Defence Against the Dark Arts: <input name="preferences.interests" type="checkbox" value="Defence Against the Dark Arts"/>
+        <input type="hidden" value="1" name="_preferences.interests"/>
+    </td>
 </tr>
 ```
 
@@ -537,15 +535,15 @@ The form.jsp would look like:
 
 ```
 <form:form>
-	<table>
-		<tr>
-			<td>Interests:</td>
-			<td>
-				<%-- Property is of an array or of type java.util.Collection --%>
-				<form:checkboxes path="preferences.interests" items="${interestList}"/>
-			</td>
-		</tr>
-	</table>
+    <table>
+        <tr>
+            <td>Interests:</td>
+            <td>
+                <%-- Property is of an array or of type java.util.Collection --%>
+                <form:checkboxes path="preferences.interests" items="${interestList}"/>
+            </td>
+        </tr>
+    </table>
 </form:form>
 ```
 
@@ -557,11 +555,11 @@ The form.jsp would look like:
 
 ```
 <tr>
-	<td>Sex:</td>
-	<td>
-		Male: <form:radiobutton path="sex" value="M"/> <br/>
-		Female: <form:radiobutton path="sex" value="F"/>
-	</td>
+    <td>Sex:</td>
+    <td>
+        Male: <form:radiobutton path="sex" value="M"/> <br/>
+        Female: <form:radiobutton path="sex" value="F"/>
+    </td>
 </tr>
 ```
 
@@ -573,8 +571,8 @@ The form.jsp would look like:
 
 ```
 <tr>
-	<td>Sex:</td>
-	<td><form:radiobuttons path="sex" items="${sexOptions}"/></td>
+    <td>Sex:</td>
+    <td><form:radiobuttons path="sex" items="${sexOptions}"/></td>
 </tr>
 ```
 
@@ -584,10 +582,10 @@ The form.jsp would look like:
 
 ```
 <tr>
-	<td>Password:</td>
-	<td>
-		<form:password path="password"/>
-	</td>
+    <td>Password:</td>
+    <td>
+        <form:password path="password"/>
+    </td>
 </tr>
 ```
 
@@ -595,10 +593,10 @@ The form.jsp would look like:
 
 ```
 <tr>
-	<td>Password:</td>
-	<td>
-		<form:password path="password" value="^76525bvHGq" showPassword="true"/>
-	</td>
+    <td>Password:</td>
+    <td>
+        <form:password path="password" value="^76525bvHGq" showPassword="true"/>
+    </td>
 </tr>
 ```
 
@@ -610,8 +608,8 @@ The form.jsp would look like:
 
 ```
 <tr>
-	<td>Skills:</td>
-	<td><form:select path="skills" items="${skills}"/></td>
+    <td>Skills:</td>
+    <td><form:select path="skills" items="${skills}"/></td>
 </tr>
 ```
 
@@ -619,14 +617,14 @@ The form.jsp would look like:
 
 ```
 <tr>
-	<td>Skills:</td>
-	<td>
-		<select name="skills" multiple="true">
-			<option value="Potions">Potions</option>
-			<option value="Herbology" selected="selected">Herbology</option>
-			<option value="Quidditch">Quidditch</option>
-		</select>
-	</td>
+    <td>Skills:</td>
+    <td>
+        <select name="skills" multiple="true">
+            <option value="Potions">Potions</option>
+            <option value="Herbology" selected="selected">Herbology</option>
+            <option value="Quidditch">Quidditch</option>
+        </select>
+    </td>
 </tr>
 ```
 
@@ -636,15 +634,15 @@ The form.jsp would look like:
 
 ```
 <tr>
-	<td>House:</td>
-	<td>
-		<form:select path="house">
-			<form:option value="Gryffindor"/>
-			<form:option value="Hufflepuff"/>
-			<form:option value="Ravenclaw"/>
-			<form:option value="Slytherin"/>
-		</form:select>
-	</td>
+    <td>House:</td>
+    <td>
+        <form:select path="house">
+            <form:option value="Gryffindor"/>
+            <form:option value="Hufflepuff"/>
+            <form:option value="Ravenclaw"/>
+            <form:option value="Slytherin"/>
+        </form:select>
+    </td>
 </tr>
 ```
 
@@ -652,15 +650,15 @@ The form.jsp would look like:
 
 ```
 <tr>
-	<td>House:</td>
-	<td>
-		<select name="house">
-			<option value="Gryffindor" selected="selected">Gryffindor</option>
-			<option value="Hufflepuff">Hufflepuff</option>
-			<option value="Ravenclaw">Ravenclaw</option>
-			<option value="Slytherin">Slytherin</option>
-		</select>
-	</td>
+    <td>House:</td>
+    <td>
+        <select name="house">
+            <option value="Gryffindor" selected="selected">Gryffindor</option>
+            <option value="Hufflepuff">Hufflepuff</option>
+            <option value="Ravenclaw">Ravenclaw</option>
+            <option value="Slytherin">Slytherin</option>
+        </select>
+    </td>
 </tr>
 ```
 
@@ -670,13 +668,13 @@ The form.jsp would look like:
 
 ```
 <tr>
-	<td>Country:</td>
-	<td>
-		<form:select path="country">
-			<form:option value="-" label="--Please Select"/>
-			<form:options items="${countryList}" itemValue="code" itemLabel="name"/>
-		</form:select>
-	</td>
+    <td>Country:</td>
+    <td>
+        <form:select path="country">
+            <form:option value="-" label="--Please Select"/>
+            <form:options items="${countryList}" itemValue="code" itemLabel="name"/>
+        </form:select>
+    </td>
 </tr>
 ```
 
@@ -684,15 +682,15 @@ The form.jsp would look like:
 
 ```
 <tr>
-	<td>Country:</td>
-	<td>
-		<select name="country">
-			<option value="-">--Please Select</option>
-			<option value="AT">Austria</option>
-			<option value="UK" selected="selected">United Kingdom</option>
-			<option value="US">United States</option>
-		</select>
-	</td>
+    <td>Country:</td>
+    <td>
+        <select name="country">
+            <option value="-">--Please Select</option>
+            <option value="AT">Austria</option>
+            <option value="UK" selected="selected">United Kingdom</option>
+            <option value="US">United States</option>
+        </select>
+    </td>
 </tr>
 ```
 
@@ -706,9 +704,9 @@ items属性通常用一组或多个项目对象填充。 itemValue和itemLabel�
 
 ```
  <tr>
-	<td>Notes:</td>
-	<td><form:textarea path="notes" rows="3" cols="20"/></td>
-	<td><form:errors path="notes"/></td>
+    <td>Notes:</td>
+    <td><form:textarea path="notes" rows="3" cols="20"/></td>
+    <td><form:errors path="notes"/></td>
 </tr>
 ```
 
@@ -732,14 +730,14 @@ items属性通常用一组或多个项目对象填充。 itemValue和itemLabel�
 ```
 public class UserValidator implements Validator {
 
-	public boolean supports(Class candidate) {
-		return User.class.isAssignableFrom(candidate);
-	}
+    public boolean supports(Class candidate) {
+        return User.class.isAssignableFrom(candidate);
+    }
 
-	public void validate(Object obj, Errors errors) {
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName", "required", "Field is required.");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastName", "required", "Field is required.");
-	}
+    public void validate(Object obj, Errors errors) {
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName", "required", "Field is required.");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastName", "required", "Field is required.");
+    }
 }
 ```
 
@@ -747,26 +745,26 @@ form.jsp如下所示：
 
 ```
 <form:form>
-	<table>
-		<tr>
-			<td>First Name:</td>
-			<td><form:input path="firstName"/></td>
-			<%-- Show errors for firstName field --%>
-			<td><form:errors path="firstName"/></td>
-		</tr>
+    <table>
+        <tr>
+            <td>First Name:</td>
+            <td><form:input path="firstName"/></td>
+            <%-- Show errors for firstName field --%>
+            <td><form:errors path="firstName"/></td>
+        </tr>
 
-		<tr>
-			<td>Last Name:</td>
-			<td><form:input path="lastName"/></td>
-			<%-- Show errors for lastName field --%>
-			<td><form:errors path="lastName"/></td>
-		</tr>
-		<tr>
-			<td colspan="3">
-				<input type="submit" value="Save Changes"/>
-			</td>
-		</tr>
-	</table>
+        <tr>
+            <td>Last Name:</td>
+            <td><form:input path="lastName"/></td>
+            <%-- Show errors for lastName field --%>
+            <td><form:errors path="lastName"/></td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="submit" value="Save Changes"/>
+            </td>
+        </tr>
+    </table>
 </form:form>
 ```
 
@@ -774,57 +772,57 @@ form.jsp如下所示：
 
 ```
 <form method="POST">
-	<table>
-		<tr>
-			<td>First Name:</td>
-			<td><input name="firstName" type="text" value=""/></td>
-			<%-- Associated errors to firstName field displayed --%>
-			<td><span name="firstName.errors">Field is required.</span></td>
-		</tr>
+    <table>
+        <tr>
+            <td>First Name:</td>
+            <td><input name="firstName" type="text" value=""/></td>
+            <%-- Associated errors to firstName field displayed --%>
+            <td><span name="firstName.errors">Field is required.</span></td>
+        </tr>
 
-		<tr>
-			<td>Last Name:</td>
-			<td><input name="lastName" type="text" value=""/></td>
-			<%-- Associated errors to lastName field displayed --%>
-			<td><span name="lastName.errors">Field is required.</span></td>
-		</tr>
-		<tr>
-			<td colspan="3">
-				<input type="submit" value="Save Changes"/>
-			</td>
-		</tr>
-	</table>
+        <tr>
+            <td>Last Name:</td>
+            <td><input name="lastName" type="text" value=""/></td>
+            <%-- Associated errors to lastName field displayed --%>
+            <td><span name="lastName.errors">Field is required.</span></td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="submit" value="Save Changes"/>
+            </td>
+        </tr>
+    </table>
 </form>
 ```
 
 如果我们要显示给定页面的整个错误列表怎么办？ 下面的示例显示了errors标签还支持一些基本的通配符功能。
 
 * `path="*"`– 显示所有的错误
-* `path="lastName"`– 显示与`lastName` 相关的错误
+* `path="lastName"`– 显示与`lastName` 相关的错误
 * `假如path`省略- 仅显示对象错误
 
 下面的示例将显示页面顶部的错误列表，后跟字段旁边的字段特定错误:
 
 ```
 <form:form>
-	<form:errors path="*" cssClass="errorBox"/>
-	<table>
-		<tr>
-			<td>First Name:</td>
-			<td><form:input path="firstName"/></td>
-			<td><form:errors path="firstName"/></td>
-		</tr>
-		<tr>
-			<td>Last Name:</td>
-			<td><form:input path="lastName"/></td>
-			<td><form:errors path="lastName"/></td>
-		</tr>
-		<tr>
-			<td colspan="3">
-				<input type="submit" value="Save Changes"/>
-			</td>
-		</tr>
-	</table>
+    <form:errors path="*" cssClass="errorBox"/>
+    <table>
+        <tr>
+            <td>First Name:</td>
+            <td><form:input path="firstName"/></td>
+            <td><form:errors path="firstName"/></td>
+        </tr>
+        <tr>
+            <td>Last Name:</td>
+            <td><form:input path="lastName"/></td>
+            <td><form:errors path="lastName"/></td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="submit" value="Save Changes"/>
+            </td>
+        </tr>
+    </table>
 </form:form>
 ```
 
@@ -832,24 +830,24 @@ HTML是这样的：
 
 ```
 <form method="POST">
-	<span name="*.errors" class="errorBox">Field is required.<br/>Field is required.</span>
-	<table>
-		<tr>
-			<td>First Name:</td>
-			<td><input name="firstName" type="text" value=""/></td>
-			<td><span name="firstName.errors">Field is required.</span></td>
-		</tr>
+    <span name="*.errors" class="errorBox">Field is required.<br/>Field is required.</span>
+    <table>
+        <tr>
+            <td>First Name:</td>
+            <td><input name="firstName" type="text" value=""/></td>
+            <td><span name="firstName.errors">Field is required.</span></td>
+        </tr>
 
-		<tr>
-			<td>Last Name:</td>
-			<td><input name="lastName" type="text" value=""/></td>
-			<td><span name="lastName.errors">Field is required.</span></td>
-		</tr>
-		<tr>
-			<td colspan="3">
-				<input type="submit" value="Save Changes"/>
-			</td>
-		</tr>
+        <tr>
+            <td>Last Name:</td>
+            <td><input name="lastName" type="text" value=""/></td>
+            <td><span name="lastName.errors">Field is required.</span></td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="submit" value="Save Changes"/>
+            </td>
+        </tr>
        </table>
 </form>
 ```
@@ -862,7 +860,7 @@ REST的一个关键原则是使用统一接口。这意味着可以使用相同�
 
 ```
 <form:form method="delete">
-	<p class="submit"><input type="submit" value="Delete Pet"/></p>
+    <p class="submit"><input type="submit" value="Delete Pet"/></p>
 </form:form>
 ```
 
@@ -870,13 +868,13 @@ REST的一个关键原则是使用统一接口。这意味着可以使用相同�
 
 ```
 <filter>
-	<filter-name>httpMethodFilter</filter-name>
-	<filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+    <filter-name>httpMethodFilter</filter-name>
+    <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
 </filter>
 
 <filter-mapping>
-	<filter-name>httpMethodFilter</filter-name>
-	<servlet-name>petclinic</servlet-name>
+    <filter-name>httpMethodFilter</filter-name>
+    <servlet-name>petclinic</servlet-name>
 </filter-mapping>
 ```
 
@@ -885,8 +883,8 @@ REST的一个关键原则是使用统一接口。这意味着可以使用相同�
 ```
 @RequestMapping(method = RequestMethod.DELETE)
 public String deletePet(@PathVariable int ownerId, @PathVariable int petId) {
-	this.clinic.deletePet(petId);
-	return "redirect:/owners/" + ownerId;
+    this.clinic.deletePet(petId);
+    return "redirect:/owners/" + ownerId;
 }
 ```
 
@@ -896,33 +894,34 @@ public String deletePet(@PathVariable int ownerId, @PathVariable int petId) {
 
 在Spring 3.1中，表单输入标签支持输入“text”以外的类型属性。 这旨在允许渲染新的HTML5特定输入类型，如 ’email’, ‘date’, ‘range’等。 请注意，输入type =’text’不是必需的，因为’text’是默认类型。
 
-## 19.6 Script 模板
+## 19.6 Script 模板
 
 可以使用Spring将任何在JSR-223脚本引擎上运行的模板库集成到Web应用程序中。以下以广泛的方式描述如何做到这一点。脚本引擎必须实现ScriptEngine和Invocable接口。
 
 已通过以下测试：
 
-* H  andlebars running on Nashorn
+* H
+  andlebars running on Nashorn
 * Mustache running on Nashorn
 * React running on Nashorn
 * EJS running on Nashorn
 * ERB running on JRuby
 * String templates running on Jython
 
-### 19.6.1依赖关系
+### 19.6.1依赖关系
 
-为了能够使用脚本模板集成，您需要在您的类路径中提供脚本引擎：
+为了能够使用脚本模板集成，您需要在您的类路径中提供脚本引擎：
 
 * Nashorn Javascript引擎内置Java 8+。强烈建议使用最新的更新版本。
 * Rhino Javascript引擎内建Java 6和Java 7.请注意，不建议使用Rhino，因为它不支持运行大多数模板引擎。
 * 应该添加JRuby依赖以获得Ruby的支持。
 * 应该添加Jython依赖关系，以获得Python的支持。
 
-您还需要为基于脚本的模板引擎添加依赖关系。例如，对于Javascript，您可以使用WebJars添加Maven / Gradle依赖关系，以使您的javascript库在类路径中可用。
+您还需要为基于脚本的模板引擎添加依赖关系。例如，对于Javascript，您可以使用WebJars添加Maven / Gradle依赖关系，以使您的javascript库在类路径中可用。
 
-### 19.6.2如何集成基于脚本的模板
+### 19.6.2如何集成基于脚本的模板
 
-为了能够使用脚本模板，您必须对其进行配置，以便指定各种参数，如要使用的脚本引擎，要加载的脚本文件以及应该调用哪些函数来呈现模板。这是由于ScriptTemplateConfigurer bean和可选的脚本文件。
+为了能够使用脚本模板，您必须对其进行配置，以便指定各种参数，如要使用的脚本引擎，要加载的脚本文件以及应该调用哪些函数来呈现模板。这是由于ScriptTemplateConfigurer bean和可选的脚本文件。
 
 例如，为了渲染Mustache模板，感谢Java 8+提供的Nashorn Javascript引擎，您应该声明以下配置：
 
@@ -931,20 +930,20 @@ public String deletePet(@PathVariable int ownerId, @PathVariable int petId) {
 @EnableWebMvc
 public class MustacheConfig extends WebMvcConfigurerAdapter {
 
-	@Override
-	public void configureViewResolvers(ViewResolverRegistry registry) {
-		registry.scriptTemplate();
-	}
+    @Override
+    public void configureViewResolvers(ViewResolverRegistry registry) {
+        registry.scriptTemplate();
+    }
 
-	@Bean
-	public ScriptTemplateConfigurer configurer() {
-		ScriptTemplateConfigurer configurer = new ScriptTemplateConfigurer();
-		configurer.setEngineName("nashorn");
-		configurer.setScripts("mustache.js");
-		configurer.setRenderObject("Mustache");
-		configurer.setRenderFunction("render");
-		return configurer;
-	}
+    @Bean
+    public ScriptTemplateConfigurer configurer() {
+        ScriptTemplateConfigurer configurer = new ScriptTemplateConfigurer();
+        configurer.setEngineName("nashorn");
+        configurer.setScripts("mustache.js");
+        configurer.setRenderObject("Mustache");
+        configurer.setRenderFunction("render");
+        return configurer;
+    }
 }
 ```
 
@@ -954,11 +953,11 @@ XML 表示如下:
 <mvc:annotation-driven/>
 
 <mvc:view-resolvers>
-	<mvc:script-template/>
+    <mvc:script-template/>
 </mvc:view-resolvers>
 
 <mvc:script-template-configurer engine-name="nashorn" render-object="Mustache" render-function="render">
-	<mvc:script location="mustache.js"/>
+    <mvc:script location="mustache.js"/>
 </mvc:script-template-configurer>
 ```
 
@@ -968,13 +967,13 @@ XML 表示如下:
 @Controller
 public class SampleController {
 
-	@RequestMapping
-	public ModelAndView test() {
-		ModelAndView mav  = new ModelAndView();
-		mav.addObject("title", "Sample title").addObject("body", "Sample body");
-		mav.setViewName("template.html");
-		return mav;
-	}
+    @RequestMapping
+    public ModelAndView test() {
+        ModelAndView mav  = new ModelAndView();
+        mav.addObject("title", "Sample title").addObject("body", "Sample body");
+        mav.setViewName("template.html");
+        return mav;
+    }
 }
 ```
 
@@ -982,22 +981,22 @@ public class SampleController {
 
 ```
 <html>
-	<head>
-		<title>{{title}}</title>
-	</head>
-	<body>
-		<p>{{body}}</p>
-	</body>
+    <head>
+        <title>{{title}}</title>
+    </head>
+    <body>
+        <p>{{body}}</p>
+    </body>
 </html>
 ```
 
-使用以下参数调用render函数：
+使用以下参数调用render函数：
 
 * 字符串模板：模板内容
 * 地图模型：视图模型
 * String url：模板url（自4.2.2起）
 
-Mustache.render（）与此签名本身兼容，因此您可以直接调用它。
+Mustache.render（）与此签名本身兼容，因此您可以直接调用它。
 
 如果您的模板技术需要一些自定义，您可以提供一个实现自定义渲染功能的脚本。例如，Handlerbars需要在使用它们之前编译模板，并且需要一个polyfill才能模拟服务器端脚本引擎中不可用的一些浏览器设施。
 
@@ -1006,20 +1005,20 @@ Mustache.render（）与此签名本身兼容，因此您可以直接调用它�
 @EnableWebMvc
 public class MustacheConfig extends WebMvcConfigurerAdapter {
 
-	@Override
-	public void configureViewResolvers(ViewResolverRegistry registry) {
-		registry.scriptTemplate();
-	}
+    @Override
+    public void configureViewResolvers(ViewResolverRegistry registry) {
+        registry.scriptTemplate();
+    }
 
-	@Bean
-	public ScriptTemplateConfigurer configurer() {
-		ScriptTemplateConfigurer configurer = new ScriptTemplateConfigurer();
-		configurer.setEngineName("nashorn");
-		configurer.setScripts("polyfill.js", "handlebars.js", "render.js");
-		configurer.setRenderFunction("render");
-		configurer.setSharedEngine(false);
-		return configurer;
-	}
+    @Bean
+    public ScriptTemplateConfigurer configurer() {
+        ScriptTemplateConfigurer configurer = new ScriptTemplateConfigurer();
+        configurer.setEngineName("nashorn");
+        configurer.setScripts("polyfill.js", "handlebars.js", "render.js");
+        configurer.setRenderFunction("render");
+        configurer.setSharedEngine(false);
+        return configurer;
+    }
 }
 ```
 
@@ -1027,18 +1026,18 @@ public class MustacheConfig extends WebMvcConfigurerAdapter {
 >
 > 如果使用非线程安全的脚本引擎，而不使用非并行设计的模板库（例如，在Nashorn上运行的Handlebars或React），则需要将sharedEngine属性设置为false。在这种情况下，由于这个错误，需要Java 8u60或更高版本。
 
-polyfill.js仅定义Handlebars需要正确运行的窗口对象：
+polyfill.js仅定义Handlebars需要正确运行的窗口对象：
 
 ```
-var window = {};
+var window = {};
 ```
 
 这个基本的render.js实现在使用之前编译模板。生产就绪实现还应该存储和重新使用缓存的模板/预编译模板。这可以在脚本端完成，以及您需要的任何定制（例如，管理模板引擎配置）。
 
 ```
 function render(template, model) {
-	var compiledTemplate = Handlebars.compile(template);
-	return compiledTemplate(model);
+    var compiledTemplate = Handlebars.compile(template);
+    return compiledTemplate(model);
 }
 ```
 
@@ -1046,29 +1045,29 @@ function render(template, model) {
 
 MarshallingView使用org.springframework.oxm包中定义的XML Marshaller将响应内容呈现为XML。 要编组的对象可以使用MarhsallingView的\`modelKey bean属性显式设置。 或者，视图将遍历所有模型属性并编组Marshaller支持的第一个类型。 有关org.springframework.oxm软件包中的功能的更多信息，请参阅使用O / X Mappers编组XML的章节。
 
-## 19.8 Tiles
+## 19.8 Tiles
 
 在使用Spring的Web应用程序中，可以将Tiles 与任何其他视图技术集成在一起。 以下以广泛的方式描述如何做到这一点。
 
-### 19.8.1 依赖
+### 19.8.1 依赖
 
 为了可以使用Tiles，您必须添加对Tiles 3.0.1版或更高版本的依赖关系，以及其对您的项目的传递依赖性。
 
-### 19.8.2 怎样集成 Tiles
+### 19.8.2 怎样集成 Tiles
 
-为了使用Tiles，你需要使用文件定义 配置 \(对于基本定义和其他Tiles内容，请查看[http://tiles.apache.org](https://tiles.apache.org/)\). 在Spring 是使用 `TilesConfigurer`. 请看下面的例子:
+为了使用Tiles，你需要使用文件定义 配置 \(对于基本定义和其他Tiles内容，请查看[http://tiles.apache.org](https://tiles.apache.org/)\). 在Spring 是使用 `TilesConfigurer`. 请看下面的例子:
 
 ```
 <bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
-	<property name="definitions">
-		<list>
-			<value>/WEB-INF/defs/general.xml</value>
-			<value>/WEB-INF/defs/widgets.xml</value>
-			<value>/WEB-INF/defs/administrator.xml</value>
-			<value>/WEB-INF/defs/customer.xml</value>
-			<value>/WEB-INF/defs/templates.xml</value>
-		</list>
-	</property>
+    <property name="definitions">
+        <list>
+            <value>/WEB-INF/defs/general.xml</value>
+            <value>/WEB-INF/defs/widgets.xml</value>
+            <value>/WEB-INF/defs/administrator.xml</value>
+            <value>/WEB-INF/defs/customer.xml</value>
+            <value>/WEB-INF/defs/templates.xml</value>
+        </list>
+    </property>
 </bean>
 ```
 
@@ -1078,12 +1077,12 @@ MarshallingView使用org.springframework.oxm包中定义的XML Marshaller将响�
 
 ```
 <bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
-	<property name="definitions">
-		<list>
-			<value>/WEB-INF/defs/tiles.xml</value>
-			<value>/WEB-INF/defs/tiles_fr_FR.xml</value>
-		</list>
-	</property>
+    <property name="definitions">
+        <list>
+            <value>/WEB-INF/defs/tiles.xml</value>
+            <value>/WEB-INF/defs/tiles_fr_FR.xml</value>
+        </list>
+    </property>
 </bean>
 ```
 
@@ -1095,7 +1094,7 @@ UrlBasedViewResolver为给定的viewClass实例化其必须解析的每个视图
 
 ```
 <bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
-	<property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView"/>
+    <property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView"/>
 </bean>
 ```
 
@@ -1105,7 +1104,7 @@ ResourceBundleViewResolver必须提供一个属性文件，其中包含解析器
 
 ```
 <bean id="viewResolver" class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
-	<property name="basename" value="views"/>
+    <property name="basename" value="views"/>
 </bean>
 ```
 
@@ -1126,7 +1125,7 @@ findOwnersForm.url=/WEB-INF/jsp/findOwners.jsp
 
 请注意，TilesView类支持JSTL（JSP标准标记库）。
 
-####  SimpleSpringPreparerFactory and SpringBeanPreparerFactory
+#### SimpleSpringPreparerFactory and SpringBeanPreparerFactory
 
 作为高级功能，Spring还支持两种特殊的Tiles PreparerFactory实现。有关如何在您的Tiles定义文件中使用ViewPreparer引用的详细信息，请查看Tiles文档。
 
@@ -1136,19 +1135,19 @@ findOwnersForm.url=/WEB-INF/jsp/findOwners.jsp
 
 ```
 <bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
-	<property name="definitions">
-		<list>
-			<value>/WEB-INF/defs/general.xml</value>
-			<value>/WEB-INF/defs/widgets.xml</value>
-			<value>/WEB-INF/defs/administrator.xml</value>
-			<value>/WEB-INF/defs/customer.xml</value>
-			<value>/WEB-INF/defs/templates.xml</value>
-		</list>
-	</property>
+    <property name="definitions">
+        <list>
+            <value>/WEB-INF/defs/general.xml</value>
+            <value>/WEB-INF/defs/widgets.xml</value>
+            <value>/WEB-INF/defs/administrator.xml</value>
+            <value>/WEB-INF/defs/customer.xml</value>
+            <value>/WEB-INF/defs/templates.xml</value>
+        </list>
+    </property>
 
-	<!-- resolving preparer names as Spring bean definition names -->
-	<property name="preparerFactoryClass"
-			value="org.springframework.web.servlet.view.tiles3.SpringBeanPreparerFactory"/>
+    <!-- resolving preparer names as Spring bean definition names -->
+    <property name="preparerFactoryClass"
+            value="org.springframework.web.servlet.view.tiles3.SpringBeanPreparerFactory"/>
 
 </bean>
 ```

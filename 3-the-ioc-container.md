@@ -1,0 +1,70 @@
+# 3. IoC容器
+
+## 3.1 Spring IoC容器和beans的介绍
+
+本章涵盖了Spring框架实现控制反转（IoC）[\[1\]](http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/html/beans.html#ftn.d5e685)的原理。IoC又叫依赖注入（DI）。它描述了对象的定义和依赖的一个过程，也就是说，依赖的对象通过构造参数、工厂方法参数或者属性注入，当对象实例化后依赖的对象才被创建，当创建bean后容器注入这些依赖对象。这个过程基本上是反向的，因此命名为控制反转（IoC），它通过直接使用构造类来控制实例化，或者定义它们之间的依赖关系，或者类似于服务定位模式的一种机制。
+
+`org.springframework.beans`和`org.springframework.context`是Spring框架中IoC容器的基础，[`BeanFactory`](http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/beans/factory/BeanFactory.html)接口提供一种高级的配置机制能够管理任何类型的对象。[`ApplicationContext`](http://ifeve.com/spring-ioc-1-2/href=%22http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/context/ApplicationContext.html)是`BeanFactory`的子接口。它能更容易集成Spring的AOP功能、消息资源处理（比如在国际化中使用）、事件发布和特定的上下文应用层比如在网站应用中的`WebApplicationContext。`
+
+总之，`BeanFactory`提供了配置框架和基本方法，`ApplicationContext`添加更多的企业特定的功能。`ApplicationContext`是`BeanFactory`的一个子接口，在本章它被专门用于Spring的IoC容器描述。更多关于使用`BeanFactory`替代`ApplicationContext`的信息请参考[章节 3.16, “The BeanFactory”](http://ifeve.com/spring-ioc-1-2/beans.html#beans-beanfactory)。
+
+在Spring中，由Spring IoC容器管理的对象叫做beans。 bean就是由Spring IoC容器实例化、组装和以其他方式管理的对象。此外bean只是你应用中许多对象中的一个。Beans以及他们之间的依赖关系是通过容器配置元数据反映出来。
+
+## 3.2容器概述
+
+`org.springframework.context.ApplicationContext`接口代表了Spring Ioc容器，它负责实例化、配置、组装之前的beans。容器通过读取配置元数据获取对象的实例化、配置和组装的描述信息。它配置的0元数据用xml、Java注解或Java代码表示。它允许你表示组成你应用的对象以及这些对象之间丰富的内部依赖关系。
+
+Spring提供几个开箱即用的`ApplicationContext`接口的实现类。在独立应用程序中通常创建一个[`ClassPathXmlApplicationContext`](http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/context/support/ClassPathXmlApplicationContext.html)或[`FileSystemXmlApplicationContext`](http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/context/support/FileSystemXmlApplicationContext.html)实例对象。虽然XML是用于定义配置元数据的传统格式，你也可以指示容器使用Java注解或代码作为元数据格式，但要通过提供少量XML配置来声明启用对这些附加元数据格式的支持。
+
+在大多数应用场景中，显示用户代码不需要实例化一个或多个Spring IoC容器的实例。比如在web应用场景中，在web.xml中简单的8行（或多点）样板式的xml配置文件就可以搞定（参见第3.15.4节“Web应用程序的便利的ApplicationContext实例化”）。如果你正在使用Eclipse开发环境中的[Spring Tool Suite](https://spring.io/tools/sts)插件，你只需要鼠标点点或者键盘敲敲就能轻松搞定这几行配置。
+
+下图是Spring如何工作的高级展示。你应用中所有的类都由元数据组装到一起  
+所以当`ApplicationContext`创建和实例化后，你就有了一个完全可配置和可执行的系统或应用。
+
+_Figure 5.1. Spring IoC容器_
+
+![](/assets/container-magic.png)
+
+### 3.2.1 配置元数据
+
+如上图所示，Spring IoC容器使用了一种_配置元数据_的形式。此配置元数据表示应用程序的开发人员告诉Spring容器怎样去实例化、配置和装备你应用中的对象。
+
+配置元数据传统上以简单直观的XML格式提供，本章大部分都使用这种格式来表达Spring IoC容器核心概念和特性。
+
+> 基于XML的元数据不是允许配置元数据的唯一形式，Spring IoC容器与实际写入配置元数据的格式是分离的。这些天许多的开发者在他们的Spring应用中选择基于[Java配置](http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/html/beans.html#beans-java)。
+
+更多关于Spring容器使用其他形式的元数据信息，请查看：
+
+* [基于注解配置：](http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/html/beans.html#beans-annotation-config)
+  在Spring2.5中有过介绍支持基于注解的配置元数据
+* [基于Java配置：](http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/html/beans.html#beans-java)
+  从Spring3.0开始，由Spring JavaConfig提供的许多功能已经成为Spring框架中的核心部分。这样你可以使用Java程序而不是XML文件定义外部应用程序中的bean类。使用这些新功能，可以查看`@Configuration`,`@Bean`,`@Import`和`@DependsOn`这些注解
+
+Spring配置由必须容器管理的一个或通常多个定义好的bean组成。基于XML配置的元数据中，这些bean通过标签定义在顶级标签内部。在Java配置中通常在使用`@Configuration`注解的类中使用`@Bean`注解方法。
+
+这些bean的定义所对应的实际对象就组成了你的应用。通常你会定义服务层对象，数据访问层对象\(DAO\)，展现层对象比如Struts的`Action`实例，底层对象比如Hibernate的`SessionFactories`，JMS`Queues`等等。通常在容器中不定义细粒度的域对象，因为一般是由DAO层或者业务逻辑处理层负责创建和加载这些域对象。但是，你可以使用Spring集成Aspectj来配置IoC容器管理之外所创建的对象。详情请查看[Spring使用AspectJ依赖注入域对象](http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/html/aop.html#aop-atconfigurable)
+
+接下来这个例子展示了基于XML配置元数据的基本结构
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="..." class="...">
+		<!-- 在这里写 bean 的配置和相关引用 -->
+	</bean>
+
+	<bean id="..." class="...">
+		<!-- 在这里写 bean 的配置和相关引用 -->
+	</bean>
+
+	<!-- 在这里配置更多的bean -->
+
+</beans>
+```
+
+id属性用来使用标识每个独立的bean定义的字符串。`class`属性定义了bean的类型，这个类型必须使用全路径类名（必须是包路径+类名）。id属性值可以被依赖对象引用。该例中没有体现XML引用其他依赖对象。更多请查看[bean的依赖](http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/html/beans.html#beans-dependencies)。
+
