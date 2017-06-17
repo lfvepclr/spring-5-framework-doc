@@ -121,7 +121,7 @@ public class SimpleObject {
 
 ## 24.3 使用Hessian通过HTTP远程调用服务
 
-Hessian提供一种基于HTTP的二进制远程协议。它由Caucho开发的，可以在 http://www.caucho.com 找到更多有关Hessian的信息。
+Hessian提供一种基于HTTP的二进制远程协议。它由Caucho开发的，可以在 [http://www.caucho.com](http://www.caucho.com) 找到更多有关Hessian的信息。
 
 ### 24.3.1 为Hessian和co.配置DispatcherServlet
 
@@ -159,7 +159,7 @@ Hessian使用一个自定义Servlet通过HTTP进行通讯。使用Spring的Dispa
 </bean>
 ```
 
-现在我们准备好在客户端连接服务了。不必显示指定处理器的映射，所以使用BeanNameUrlHandlerMapping把URL请求映射到服务上：因此，服务将通过其包含的bean名称指定的URL导出 DispatcherServlet’s mapping \(as defined above\): ’http://HOST:8080/remoting/AccountService’ 或者, 在你的根应用上下文中创建一个HessianServiceExporter\(比如在’WEB-INF/applicationContext.xml’中\):
+现在我们准备好在客户端连接服务了。不必显示指定处理器的映射，所以使用BeanNameUrlHandlerMapping把URL请求映射到服务上：因此，服务将通过其包含的bean名称指定的URL导出 DispatcherServlet’s mapping \(as defined above\): ’[http://HOST:8080/remoting/AccountService’](http://HOST:8080/remoting/AccountService’) 或者, 在你的根应用上下文中创建一个HessianServiceExporter\(比如在’WEB-INF/applicationContext.xml’中\):
 
 ```
 <bean name="accountExporter" class="org.springframework.remoting.caucho.HessianServiceExporter">
@@ -214,7 +214,7 @@ Hessian的优点之一是，我们可以轻松应用HTTP基本身份验证，因
 
 这个是我们显式使用了BeanNameUrlHandlerMapping的例子，并设置了一个拦截器，只允许管理员和操作员调用这个应用上下文中提及的bean。
 
-> Note: 当然，这个例子并不表现出灵活的安全架构。有关安全性方面的更多选项，请查看Spring Security项目http://projects.spring.io/spring-security/。
+> Note: 当然，这个例子并不表现出灵活的安全架构。有关安全性方面的更多选项，请查看Spring Security项目[http://projects.spring.io/spring-security/。](http://projects.spring.io/spring-security/。)
 
 ## 24.4 使用HTTP调用器暴露服务
 
@@ -628,13 +628,13 @@ Table 24.1. RestTemplate方法概述
 
 | HTTP Method | RestTemplate Method |
 | :--- | :--- |
-| DELETE | [delete](http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/web/client/RestTemplate.html#delete%28String,%20Object%E2%80%A6%E2%80%8B%29) |
-| GET | [getForObject](http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/web/client/RestTemplate.html#getForObject%28String,%20Class,%20Object%E2%80%A6%E2%80%8B%29) [getForEntity](http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/web/client/RestTemplate.html#getForEntity%28String,%20Class,%20Object%E2%80%A6%E2%80%8B%29) |
-| HEAD | [headForHeaders\(String url, String…​ uriVariables\)](http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/web/client/RestTemplate.html#headForHeaders%28String,%20Object%E2%80%A6%E2%80%8B%29) |
-| OPTIONS | [optionsForAllow\(String url, String…​ uriVariables\)](http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/web/client/RestTemplate.html#optionsForAllow%28String,%20Object%E2%80%A6%E2%80%8B%29) |
-| POST | [postForLocation\(String url, Object request, String…​ uriVariables\)](http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/web/client/RestTemplate.html#postForLocation%28String,%20Object,%20Object%E2%80%A6%E2%80%8B%29) [postForObject\(String url, Object request, Class&lt;T&gt; responseType, String…​ uriVariables\)](http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/web/client/RestTemplate.html#postForObject%28java.lang.String,%20java.lang.Object,%20java.lang.Class,%20java.lang.String%E2%80%A6%E2%80%8B%29) |
-| PUT | [put\(String url, Object request, String…​uriVariables\)](http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/web/client/RestTemplate.html#put%28String,%20Object,%20Object%E2%80%A6%E2%80%8B%29) |
-| PATCH and others | [exchange](http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/web/client/RestTemplate.html#exchange%28java.lang.String,%20org.springframework.http.HttpMethod,%20org.springframework.http.HttpEntity,%20java.lang.Class,%20java.lang.Object%E2%80%A6%E2%80%8B%29) [execute](http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/web/client/RestTemplate.html#execute%28java.lang.String,%20org.springframework.http.HttpMethod,%20org.springframework.web.client.RequestCallback,%20org.springframework.web.client.ResponseExtractor,%20java.lang.Object%E2%80%A6%E2%80%8B%29) |
+| DELETE | [delete](http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/web/client/RestTemplate.html#delete%28String, Object…​%29) |
+| GET | [getForObject](http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/web/client/RestTemplate.html#getForObject%28String, Class, Object…​%29) [getForEntity](http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/web/client/RestTemplate.html#getForEntity%28String, Class, Object…​%29) |
+| HEAD | [headForHeaders\(String url, String…​ uriVariables\)](http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/web/client/RestTemplate.html#headForHeaders%28String, Object…​%29) |
+| OPTIONS | [optionsForAllow\(String url, String…​ uriVariables\)](http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/web/client/RestTemplate.html#optionsForAllow%28String, Object…​%29) |
+| POST | [postForLocation\(String url, Object request, String…​ uriVariables\)](http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/web/client/RestTemplate.html#postForLocation%28String, Object, Object…​%29) [postForObject\(String url, Object request, Class&lt;T&gt; responseType, String…​ uriVariables\)](http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/web/client/RestTemplate.html#postForObject%28java.lang.String, java.lang.Object, java.lang.Class, java.lang.String…​%29) |
+| PUT | [put\(String url, Object request, String…​uriVariables\)](http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/web/client/RestTemplate.html#put%28String, Object, Object…​%29) |
+| PATCH and others | [exchange](http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/web/client/RestTemplate.html#exchange%28java.lang.String, org.springframework.http.HttpMethod, org.springframework.http.HttpEntity, java.lang.Class, java.lang.Object…​%29) [execute](http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/web/client/RestTemplate.html#execute%28java.lang.String, org.springframework.http.HttpMethod, org.springframework.web.client.RequestCallback, org.springframework.web.client.ResponseExtractor, java.lang.Object…​%29) |
 
 RestTemplate方法名称遵循命名约定，第一部分指出正在调用什么HTTP方法，第二部分指出返回的内容。例如，该方法getForObject\(\)将执行GET，将HTTP响应转换为你选择的对象类型并返回该对象。方法postForLocation\(\) 将执行POST，将给定对象转换为HTTP请求，并返回可以找到新创建的对象的响应HTTP Location头。在异常处理HTTP请求的情况下，RestClientException类型的异常将被抛出; 这个行为可以在RestTemplate通过插入另一个ResponseErrorHandler实现来改变。
 
@@ -706,17 +706,16 @@ public interface RequestCallback {
 
 允许您操作请求标头并写入请求主体。当使用execute方法时，你不必担心任何资源管理，模板将始终关闭请求并处理任何错误。有关使用execute方法及它的其他方法参数的含义的更多信息，请参阅API文档。
 
-### 使用URI
+#### 使用URI
 
 对于每个主要的HTTP方法，RestTemplate提供的变体使用String URI或java.net.URI作为第一个参数。  
 String URI变体将模板参数视为String变长参数或者一个Map&lt;String,String&gt;。他们还假定URL字符串不被编码且需要编码。例如：
 
 ```
 restTemplate.getForObject("http://example.com/hotel list", String.class);
-
 ```
 
-将在 http://example.com/hotel%20list执行一个GET请求。这意味着如果输入的URL字符串已被编码，它将被编码两次 – 即将 http://example.com/hotel%20list变为http://example.com/hotel%2520list。如果这不是预期的效果，则使用java.net.URI方法变体，假设URL已经被编码，如果要重复使用单个（完全扩展）URI多次，通常也是有用的。
+将在 [http://example.com/hotel list执行一个GET请求。这意味着如果输入的URL字符串已被编码，它将被编码两次](http://example.com/hotel list执行一个GET请求。这意味着如果输入的URL字符串已被编码，它将被编码两次) – 即将 [http://example.com/hotel list变为http://example.com/hotel list。如果这不是预期的效果，则使用java.net.URI方法变体，假设URL已经被编码，如果要重复使用单个（完全扩展）URI多次，通常也是有用的。](http://example.com/hotel list变为http://example.com/hotel list。如果这不是预期的效果，则使用java.net.URI方法变体，假设URL已经被编码，如果要重复使用单个（完全扩展）URI多次，通常也是有用的。)
 
 UriComponentsBuilder类可用于构建和编码URI包括URI模板的支持。例如，你可以从URL字符串开始：
 
@@ -739,7 +738,7 @@ UriComponents uriComponents = UriComponentsBuilder.newInstance()
 URI uri = uriComponents.toUri();
 ```
 
-### 处理请求和响应头
+#### 处理请求和响应头
 
 除了上述方法之外，RestTemplate还具有exchange\(\) 方法，可以用于基于HttpEntity 类的任意HTTP方法执行。  
 也许最重要的是，该exchange\(\)方法可以用来添加请求头和读响应头。例如：
@@ -758,7 +757,7 @@ String body = response.getBody();
 
 在上面的例子，我们首先准备了一个包含MyRequestHeader 头的请求实体。然后我们检索返回和读取MyResponseHeader和消息体。
 
-### Jackson JSON 视图支持
+#### Jackson JSON 视图支持
 
 可以指定一个 Jackson JSON视图来系列化对象属性的一部分，例如：
 
