@@ -3,7 +3,7 @@
 * [Introduction](README.md)
 * [1. 入门指南](1-Getting-Started-with-Spring.md)
 * [2. 介绍Spring框架](2-Introduction-to-the-Spring-Framework.md)
-* 3. IoC容器
+* IoC容器
   * [3.1 Spring IoC容器和beans的介绍](/3-1.md)
   * [3.2 容器概述](/3-2.md)
   * [3.11 使用JSR 330标准注解](/3-11.md)
