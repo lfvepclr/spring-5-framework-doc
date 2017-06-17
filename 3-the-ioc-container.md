@@ -4,7 +4,7 @@
 
 本章涵盖了Spring框架实现控制反转（IoC）[\[1\]](http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/html/beans.html#ftn.d5e685)的原理。IoC又叫依赖注入（DI）。它描述了对象的定义和依赖的一个过程，也就是说，依赖的对象通过构造参数、工厂方法参数或者属性注入，当对象实例化后依赖的对象才被创建，当创建bean后容器注入这些依赖对象。这个过程基本上是反向的，因此命名为控制反转（IoC），它通过直接使用构造类来控制实例化，或者定义它们之间的依赖关系，或者类似于服务定位模式的一种机制。
 
-`org.springframework.beans`和`org.springframework.context`是Spring框架中IoC容器的基础，[`BeanFactory`](http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/beans/factory/BeanFactory.html)接口提供一种高级的配置机制能够管理任何类型的对象。\[`ApplicationContext`\]\([http://ifeve.com/spring-ioc-1-2/href="http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/context/ApplicationContext.html\)是\`BeanFactory\`的子接口。它能更容易集成Spring的AOP功能、消息资源处理（比如在国际化中使用）、事件发布和特定的上下文应用层比如在网站应用中的\`WebApplicationContext。\`](http://ifeve.com/spring-ioc-1-2/href="http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/context/ApplicationContext.html%29是`BeanFactory`的子接口。它能更容易集成Spring的AOP功能、消息资源处理（比如在国际化中使用）、事件发布和特定的上下文应用层比如在网站应用中的`WebApplicationContext。`)
+`org.springframework.beans`和`org.springframework.context`是Spring框架中IoC容器的基础，[`BeanFactory`](http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/beans/factory/BeanFactory.html)接口提供一种高级的配置机制能够管理任何类型的对象。\[`ApplicationContext`\]\(\[[http://ifeve.com/spring-ioc-1-2/href="http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/context/ApplicationContext.html\)是\`BeanFactory\`的子接口。它能更容易集成Spring的AOP功能、消息资源处理（比如在国际化中使用）、事件发布和特定的上下文应用层比如在网站应用中的\`WebApplicationContext。\`\]\(http://ifeve.com/spring-ioc-1-2/href="http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/context/ApplicationContext.html\)是\`BeanFactory\`的子接口。它能更容易集成Spring的AOP功能、消息资源处理（比如在国际化中使用）、事件发布和特定的上下文应用层比如在网站应用中的\`WebApplicationContext。\`](http://ifeve.com/spring-ioc-1-2/href="http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/context/ApplicationContext.html%29是`BeanFactory`的子接口。它能更容易集成Spring的AOP功能、消息资源处理（比如在国际化中使用）、事件发布和特定的上下文应用层比如在网站应用中的`WebApplicationContext。`]%28http://ifeve.com/spring-ioc-1-2/href="http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/context/ApplicationContext.html%29是`BeanFactory`的子接口。它能更容易集成Spring的AOP功能、消息资源处理（比如在国际化中使用）、事件发布和特定的上下文应用层比如在网站应用中的`WebApplicationContext。`)\)
 
 总之，`BeanFactory`提供了配置框架和基本方法，`ApplicationContext`添加更多的企业特定的功能。`ApplicationContext`是`BeanFactory`的一个子接口，在本章它被专门用于Spring的IoC容器描述。更多关于使用`BeanFactory`替代`ApplicationContext`的信息请参考[章节 3.16, “The BeanFactory”](http://ifeve.com/spring-ioc-1-2/beans.html#beans-beanfactory)。
 
@@ -427,6 +427,369 @@ public class AppConfig {
     public TransferService transferService(AccountRepository accountRepository) {
         return new TransferServiceImpl(accountRepository);
     }
+}
+```
+
+这种解决原理和基于构造函数的依赖注入几乎相同，请参考相关章节，查看详细信息。
+
+**生命周期回调**
+
+任何使用了@Bean定义了的类都支持常规生命周期回调，并且可以使用JSR-250中的@PostConstruct和@PreDestroy注解，详细信息，参考JSR-250注解。
+
+完全支持常规的Spring生命周期回调。如果一个bean实现了InitializingBean，DisposableBean或Lifecycle接口，它们的相关方法就会被容器调用。
+
+完全支持\*Aware系列的接口，例如：BeanFactoryAware，BeanNameAware，MessageSourceAware，ApplicationContextAware等。
+
+@Bean注解支持任意的初始化和销毁回调方法，这与Spring XML 中bean元素上的init方法和destroy-method属性非常相似：
+
+```
+public class Foo {
+    public void init() {
+        // initialization logic
+    }
+}
+
+public class Bar {
+    public void cleanup() {
+        // destruction logic
+    }
+}
+
+@Configuration
+public class AppConfig {
+
+    @Bean(initMethod = "init")
+    public Foo foo() {
+        return new Foo();
+    }
+
+    @Bean(destroyMethod = "cleanup")
+    public Bar bar() {
+        return new Bar();
+    }
+
+}
+```
+
+默认情况下，使用Java config定义的具有公开关闭或停止方法的bean将自动加入销毁回调。如果你有一个公开的关闭或停止方法，但是你不希望在容器关闭时被调用，只需将@Bean（destroyMethod =””）添加到你的bean定义中即可禁用默认（推测）模式。 默认情况下，您可能希望通过JNDI获取资源，因为它的生命周期在应用程序之外进行管理。特别地，请确保始终为DataSource执行此操作，因为它已知在Java EE应用程序服务器上有问题。
+
+```
+@Bean(destroyMethod="")
+public DataSource dataSource() throws NamingException {
+    return (DataSource) jndiTemplate.lookup("MyDS");
+}
+```
+
+另外，通过@Bean方法，通常会选择使用编程来进行JNDI查找：要么使用Spring的JndiTemplate/JndiLocatorDelegate帮助类，要么直接使用JNDI InitialContext，但不能使用JndiObjectFactoryBean变体来强制将返回类型声明为FactoryBean类型以代替目标的实际类型，它将使得在其他@Bean方法中更难用于交叉引用调用这些在此引用提供资源的方法。  
+当然上面的Foo例子中，在构造期间直接调用init（）方法同样有效：
+
+```
+@Configuration
+public class AppConfig {
+    @Bean
+    public Foo foo() {
+        Foo foo = new Foo();
+        foo.init();
+        return foo;
+    }
+
+    // ...
+
+}
+```
+
+当您直接在Java中工作时，您可以对对象执行任何您喜欢的操作，并不总是需要依赖容器生命周期！
+
+**指定bean的作用域**
+
+**使用@Scope注解**
+
+你可以指定@Bean注解定义的bean应具有的特定作用域。你可以使用Bean作用域章节中的任何标准作用域。
+
+默认的作用域是单例，但是你可以用@Scope注解重写作用域。
+
+```
+@Configuration
+public class MyConfiguration {
+
+    @Bean
+    @Scope("prototype")
+    public Encryptor encryptor() {
+        // ...
+    }
+
+}
+```
+
+**@Scope和scope 代理**
+
+Spring提供了一个通过范围代理来处理范围依赖的便捷方法。使用XML配置创建此类代理的最简单方法是元素。使用@Scope注解配置Java中的bean提供了与proxyMode属性相似的支持。默认是没有代理（ScopedProxyMode.NO），但您可以指定ScopedProxyMode.TARGET\_CLASS或ScopedProxyMode.INTERFACES。
+
+如果你使用Java将XML参考文档（请参阅上述链接）到范围的@Bean中移植范围限定的代理示例，则它将如下所示  
+如果你将XML 参考文档的scoped代理示例转化为Java @Bean，如下所示：
+
+```
+// an HTTP Session-scoped bean exposed as a proxy
+@Bean
+@SessionScope
+public UserPreferences userPreferences() {
+    return new UserPreferences();
+}
+
+@Bean
+public Service userService() {
+    UserService service = new SimpleUserService();
+    // a reference to the proxied userPreferences bean
+    service.setUserPreferences(userPreferences());
+    return service;
+}
+```
+
+**自定义Bean命名**
+
+默认情况下，配置类使用@Bean方法的名称作为生成的bean的名称。但是，可以使用name属性来重写此功能。
+
+```
+@Configuration
+public class AppConfig {
+
+    @Bean(name = "myFoo")
+    public Foo foo() {
+        return new Foo();
+    }
+
+}
+```
+
+**Bean别名**
+
+如3.3.1节”bean 命名”中所讨论的，有时一个单一的bean需要给出多个名称，称为bean别名。 为了实现这个目标，@Bean注解的name属性接受一个String数组。
+
+```
+@Configuration
+public class AppConfig {
+
+    @Bean(name = { "dataSource", "subsystemA-dataSource", "subsystemB-dataSource" })
+    public DataSource dataSource() {
+        // instantiate, configure and return DataSource bean...
+    }
+
+}
+```
+
+**Bean描述**
+
+有时候需要提供一个详细的bean描述文本是非常有用的。当对bean暴露（可能通过JMX）进行监控使，特别有用。
+
+可以使用@Description注解对Bean添加描述：
+
+```
+@Configuration
+public class AppConfig {
+
+    @Bean
+    @Description("Provides a basic example of a bean")
+    public Foo foo() {
+        return new Foo();
+    }
+
+}
+```
+
+### 3.12.4 使用@Configuration注解 {#toc_9}
+
+@Configuration是一个类级别的注解，指明此对象是bean定义的源。@Configuration类通过public @Bean注解的方法来声明bean。在@Configuration类上对@Bean方法的调用也可以用于定义bean之间的依赖。概述，请参考第3.12.1节”基本概念：@Bean和@Configuration”。
+
+**bean依赖注入**
+
+当@Beans相互依赖时，表示依赖关系就像一个bean方法调用另一个方法一样简单：
+
+```
+@Configuration
+public class AppConfig {
+
+    @Bean
+    public Foo foo() {
+        return new Foo(bar());
+    }
+
+    @Bean
+    public Bar bar() {
+        return new Bar();
+    }
+
+}
+```
+
+上面的例子，foo接受一个bar的引用来进行构造器注入：
+
+> 这种方法声明的bean的依赖关系只有在@Configuration类的@Bean方法中有效。你不能在@Component类中来声明bean的依赖关系。
+
+**方法查找注入**
+
+如前所述，方法查找注入是一个你很少用用到的高级特性。在单例的bean对原型的bean有依赖性的情况下，它非常有用。这种类型的配置使用，Java提供了实现此模式的自然方法。
+
+```
+public abstract class CommandManager {
+    public Object process(Object commandState) {
+        // grab a new instance of the appropriate Command interface
+        Command command = createCommand();
+        // set the state on the (hopefully brand new) Command instance
+        command.setState(commandState);
+        return command.execute();
+    }
+
+    // okay... but where is the implementation of this method?
+    protected abstract Command createCommand();
+}
+```
+
+使用Java支持配置，您可以创建一个CommandManager的子类，覆盖它抽象的createCommand\(\)方法，以便它查找一个新的（原型）命令对象：
+
+```
+@Bean
+@Scope("prototype")
+public AsyncCommand asyncCommand() {
+    AsyncCommand command = new AsyncCommand();
+    // inject dependencies here as required
+    return command;
+}
+
+@Bean
+public CommandManager commandManager() {
+    // return new anonymous implementation of CommandManager with command() overridden
+    // to return a new prototype Command object
+    return new CommandManager() {
+        protected Command createCommand() {
+            return asyncCommand();
+        }
+    }
+}
+```
+
+**有关基于Java配置内部如何工作的更多信息**
+
+下面的例子展示了一个@Bean注解的方法被调用两次：
+
+```
+@Configuration
+public class AppConfig {
+
+    @Bean
+    public ClientService clientService1() {
+        ClientServiceImpl clientService = new ClientServiceImpl();
+        clientService.setClientDao(clientDao());
+        return clientService;
+    }
+
+    @Bean
+    public ClientService clientService2() {
+        ClientServiceImpl clientService = new ClientServiceImpl();
+        clientService.setClientDao(clientDao());
+        return clientService;
+    }
+
+    @Bean
+    public ClientDao clientDao() {
+        return new ClientDaoImpl();
+    }
+
+}
+```
+
+clientDao\(\)方法clientService1\(\)和clientService2\(\)被各自调用了一次。因为这个方法创建并返回了一个新的ClientDaoImpl实例，你通常期望会有2个实例（每个服务各一个）。这有一个明显的问题：在Spring中，bean实例默认情况下是单例。神奇的地方在于：所有的@Configuration类在启动时都使用CGLIB进行子类实例化。在子类中，子方法在调用父方法创建一个新的实例之前会首先检查任何缓存\(作用域\)的bean。注意，从Spring 3.2开始，不再需要将CGLIB添加到类路径中，因为CGLIB类已经被打包在org.springframework.cglib下，直接包含在spring-core JAR中。
+
+> 根据不同的bean作用域，它们的行为也是不同的。我们这里讨论的都是单例模式。
+>
+> 这里有一些限制是由于CGLIB在启动时动态添加的特性，特别是配置类都不能是final类型。然而从4.3开始，配置类中允许使用任何构造函数，包含@Autowired使用或单个非默认构造函数声明进行默认注入。如果你希望避免CGLIB带来的任何限制，那么可以考虑子在非@Configuration注解类中声明@Bean注解方法。例如，使用@Component注解类。在 @Bean方法之间的交叉调用不会被拦截，所以你需要在构造器或者方法级别上排除依赖注入。
+
+### 3.12.5 基于Java组合配置 {#toc_10}
+
+**使用@Import注解**
+
+和Spring XML文件中使用元素来帮助模块化配置类似，@Import注解允许从另一个配置类加载@Bean定义：
+
+```
+@Configuration
+public class ConfigA {
+
+    @Bean
+    public A a() {
+        return new A();
+    }
+
+}
+
+@Configuration
+@Import(ConfigA.class)
+public class ConfigB {
+
+    @Bean
+    public B b() {
+        return new B();
+    }
+
+}
+```
+
+现在，在实例化上下文时不是同时指明ConfigA.class和ConfigB.class，而是仅仅需要明确提供ConfigB：
+
+```
+public static void main(String[] args) {
+    ApplicationContext ctx = new AnnotationConfigApplicationContext(ConfigB.class);
+
+    // now both beans A and B will be available...
+    A a = ctx.getBean(A.class);
+    B b = ctx.getBean(B.class);
+}
+```
+
+这种方法简化了容器实例化，因为只需要处理一个类，而不是需要开发人员在构建期间记住大量的@Configuration注解类。
+
+> 从Spring Framework 4.2开始，@Import注解也支持对常规组件类的引用，类似AnnotationConfigApplicationContext.register方法。如果你希望避免组件扫描，使用一些配置类作为所有组件定义的入口，这个方法特别有用。
+
+**引入的@Bean定义中注入依赖**
+
+上面的类中可以运行，但是太过简单。在大多数实际场景中，bean在配置类之间相互依赖。当使用XML时，这没有问题，因为没有编译器参与，一个bean可以简单的声明为ref=”someBean”并且相信Spring在容器初始化过程处理它。当然，当使用@Configuration注解类，Java编译器会对配置模型放置约束，以便其他对其他引用的bean进行Java语法校验。  
+幸运的是，解决这个问题也很简单。正如我们讨论过的，@Bean方法可以有任意数量的参数来描述bean的依赖。让我们考虑一下真实场景和一系列@Configuration类，每个bean都依赖了其他配置中声明的bean：
+
+```
+@Configuration
+public class ServiceConfig {
+
+    @Bean
+    public TransferService transferService(AccountRepository accountRepository) {
+        return new TransferServiceImpl(accountRepository);
+    }
+
+}
+
+@Configuration
+public class RepositoryConfig {
+
+    @Bean
+    public AccountRepository accountRepository(DataSource dataSource) {
+        return new JdbcAccountRepository(dataSource);
+    }
+
+}
+
+@Configuration
+@Import({ServiceConfig.class, RepositoryConfig.class})
+public class SystemTestConfig {
+
+    @Bean
+    public DataSource dataSource() {
+        // return new DataSource
+    }
+
+}
+
+public static void main(String[] args) {
+    ApplicationContext ctx = new AnnotationConfigApplicationContext(SystemTestConfig.class);
+    // everything wires up across configuration classes...
+    TransferService transferService = ctx.getBean(TransferService.class);
+    transferService.transfer(100.00, "A123", "C456");
 }
 ```
 
