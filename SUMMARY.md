@@ -11,6 +11,7 @@
   * [3.13 环境抽象](/3-13.md)
   * [3.14 注册一个加载时编织器](/3-14.md)
   * [3.15 ApplicationContext的额外功能](/3-15.md)
+  * [3.16 BeanFactory](/3-16.md)
 * [4. 资源](4-resources.md)
 * [5. 验证、数据绑定和类型转换](5-validation-data-binding-and-type-conversion.md)
 * [6. Spring表达式语言](16-spel.md)
