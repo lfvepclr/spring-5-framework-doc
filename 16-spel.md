@@ -642,13 +642,13 @@ boolean trueValue = parser.parseExpression(
 
 ```
 nventor einstein = p.parseExpression(
-		"new org.spring.samples.spel.inventor.Inventor('Albert Einstein', 'German')")
-		.getValue(Inventor.class);
+        "new org.spring.samples.spel.inventor.Inventor('Albert Einstein', 'German')")
+        .getValue(Inventor.class);
 
 //create new inventor instance within add method of List
 p.parseExpression(
-		"Members.add(new org.spring.samples.spel.inventor.Inventor(
-			'Albert Einstein', 'German'))").getValue(societyContext);
+        "Members.add(new org.spring.samples.spel.inventor.Inventor(
+            'Albert Einstein', 'German'))").getValue(societyContext);
 ```
 
 ### **6.5.11 变量**
@@ -682,7 +682,7 @@ context.setVariable("primes",primes);
 // all prime numbers > 10 from the list (using selection ?{...})
 // evaluates to [11, 13, 17]
 List<Integer> primesGreaterThanTen = (List<Integer>) parser.parseExpression(
-		"#primes.?[#this>10]").getValue(context);
+        "#primes.?[#this>10]").getValue(context);
 ```
 
 ### **6.5.12 函数**
@@ -698,13 +698,13 @@ public void registerFunction(String name, Method m)
 ```
 public abstract class StringUtils {
 
-	public static String reverseString(String input) {
-		StringBuilder backwards = new StringBuilder();
-		for (int i = 0; i &amp;lt; input.length(); i++)
-			backwards.append(input.charAt(input.length() - 1 - i));
-		}
-		return backwards.toString();
-	}
+    public static String reverseString(String input) {
+        StringBuilder backwards = new StringBuilder();
+        for (int i = 0; i &amp;lt; input.length(); i++)
+            backwards.append(input.charAt(input.length() - 1 - i));
+        }
+        return backwards.toString();
+    }
 }
 ```
 
@@ -715,10 +715,10 @@ ExpressionParser parser = new SpelExpressionParser();
 StandardEvaluationContext context = new StandardEvaluationContext();
 
 context.registerFunction("reverseString",
-	StringUtils.class.getDeclaredMethod("reverseString", new Class[] { String.class }));
+    StringUtils.class.getDeclaredMethod("reverseString", new Class[] { String.class }));
 
 String helloWorldReversed = parser.parseExpression(
-	"#reverseString('hello')").getValue(context, String.class);
+    "#reverseString('hello')").getValue(context, String.class);
 ```
 
 ### **6.5.13 Bean引用**
@@ -751,7 +751,7 @@ Object bean = parser.parseExpression("&amp;amp;foo").getValue(context);
 
 ```
 String falseString = parser.parseExpression(
-		"false ? 'trueExp' : 'falseExp'").getValue(String.class);
+        "false ? 'trueExp' : 'falseExp'").getValue(String.class);
 ```
 
 在这个例子中，因为布尔值false返回的结果一定是’falseExp’。下面是一个更实际的例子。
@@ -761,7 +761,7 @@ parser.parseExpression("Name").setValue(societyContext, "IEEE");
 societyContext.setVariable("queryName", "Nikola Tesla");
 
 expression = "isMember(#queryName)? #queryName + ' is a member of the ' " +
-		"+ Name + ' Society' : #queryName + ' is not a member of the ' + Name + ' Society'";
+        "+ Name + ' Society' : #queryName + ' is not a member of the ' + Name + ' Society'";
 ```
 
 ### **6.5.15 Elvis运算符**
@@ -833,7 +833,7 @@ System.out.println(city); // null - does not throw NullPointerException!!!
 
 ```
 List<Inventor> list = (List<Inventor>) parser.parseExpression(
-		"Members.?[Nationality == 'Serbian']").getValue(societyContext);
+        "Members.?[Nationality == 'Serbian']").getValue(societyContext);
 ```
 
 筛选可以同时在list和maps上面使用。对于list来说是选择的标准是针对单个列表的每一项来比对求值，对于map来说选择的标准是针对Map的每一项（类型为Java的Map.Entry）。Map项的Key和alue都可以作为筛选的比较选项
@@ -865,8 +865,8 @@ List placesOfBirth = (List)parser.parseExpression("Members.![placeOfBirth.city]"
 
 ```
 String randomPhrase = parser.parseExpression(
-		"random number is #{T(java.lang.Math).random()}",
-		new TemplateParserContext()).getValue(String.class);
+        "random number is #{T(java.lang.Math).random()}",
+        new TemplateParserContext()).getValue(String.class);
 
 // evaluates to "random number is 0.7038186818312008"
 ```
@@ -876,17 +876,17 @@ String randomPhrase = parser.parseExpression(
 ```
 public class TemplateParserContext implements ParserContext {
 
-	public String getExpressionPrefix() {
-		return "#{";
-	}
+    public String getExpressionPrefix() {
+        return "#{";
+    }
 
-	public String getExpressionSuffix() {
-		return "}";
-	}
+    public String getExpressionSuffix() {
+        return "}";
+    }
 
-	public boolean isTemplate() {
-		return true;
-	}
+    public boolean isTemplate() {
+        return true;
+    }
 }
 ```
 
