@@ -2,15 +2,11 @@
 
 Spring Expression Language（简称SpEL）是一种功能强大的表达式语言、用于在运行时查询和操作对象图；语法上类似于Unified EL，但提供了更多的特性，特别是方法调用和基本字符串模板函数。
 
-
-
 虽然目前已经有许多其他的Java表达式语言，例如OGNL，MVEL和Jboss EL，SpEL的诞生是为了给Spring社区提供一种能够与Spring生态系统所有产品无缝对接，能提供一站式支持的表达式语言。它的语言特性由Spring生态系统的实际项目需求驱动而来，比如基于eclipse的Spring Tool Suite（Spring开发工具集）中的代码补全工具需求。尽管如此、SpEL本身基于一套与具体实现技术无关的API，在需要的时候允许其他的表达式语言实现集成进来。
 
 尽管SpEL在Spring产品中是作为表达式求值的核心基础模块，本身可以脱离Spring独立使用。为了体现它的独立性，本章节中的许多例子都将SpEL作为独立的表达式语言来使用。不过这样就需要每次都先创建一些基础框架类如解析器，而对于大多数Spring用户来说并不需要去关注这些基础框架类，仅仅只需要写相应的字符串求值表达式即可。一个典型的例子就是把SpEL集成进XML bean配置或者基于注解的Bean定义声明中（详见章节：[Expression support for defining bean definitions](http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/html/expressions.html#expressions-beandef)）
 
 本章节包含SpEL的语言特性，它的API及语法。很多地方用到了Inventor类及相关的Society类作为表达式求值的操作例子对象，这几个类的定义及操作它们的数据都列在本章的末尾.
-
-
 
 ## **6.2 功能特性**
 
@@ -157,7 +153,7 @@ SpEL默认使用Spring核心代码中的conversion service来做类型转换（o
 
 ```
 class Simple {
-	public List<Boolean> booleanList = new ArrayList<Boolean>();
+    public List<Boolean> booleanList = new ArrayList<Boolean>();
 }
 
 Simple simple = new Simple();
@@ -180,7 +176,7 @@ Boolean b = simple.booleanList.get(0);
 
 ```
 class Demo {
-	public List<String> list;
+    public List<String> list;
 }
 
 // Turn on:
@@ -233,7 +229,7 @@ someArray[0].someProperty.someOtherProperty < 0.1
 
 ```
 SpelParserConfiguration config = new SpelParserConfiguration(SpelCompilerMode.IMMEDIATE,
-	this.getClass().getClassLoader());
+    this.getClass().getClassLoader());
 
 SpelExpressionParser parser = new SpelExpressionParser(config);
 
@@ -269,9 +265,9 @@ Bean属性或者构造函数使用表达式的方式如下：
 
 ```
 <bean id="numberGuess" class="org.spring.samples.NumberGuess">
-	<property name="randomNumber" value="#{ T(java.lang.Math).random() * 100.0 }"/>
+    <property name="randomNumber" value="#{ T(java.lang.Math).random() * 100.0 }"/>
 
-	<!-- other properties -->
+    <!-- other properties -->
 </bean>
 ```
 
@@ -279,9 +275,9 @@ Bean属性或者构造函数使用表达式的方式如下：
 
 ```
 <bean id="taxCalculator" class="org.spring.samples.TaxCalculator">
-	<property name="defaultLocale" value="#{ systemProperties['user.region'] }"/>
+    <property name="defaultLocale" value="#{ systemProperties['user.region'] }"/>
 
-	<!-- other properties -->
+    <!-- other properties -->
 </bean>
 ```
 
@@ -289,15 +285,15 @@ Bean属性或者构造函数使用表达式的方式如下：
 
 ```
 <bean id="numberGuess" class="org.spring.samples.NumberGuess">
-	<property name="randomNumber" value="#{ T(java.lang.Math).random() * 100.0 }"/>
+    <property name="randomNumber" value="#{ T(java.lang.Math).random() * 100.0 }"/>
 
-	<!-- other properties -->
+    <!-- other properties -->
 </bean>
 
 <bean id="shapeGuess" class="org.spring.samples.ShapeGuess">
-	<property name="initialShapeSeed" value="#{ numberGuess.randomNumber }"/>
+    <property name="initialShapeSeed" value="#{ numberGuess.randomNumber }"/>
 
-	<!-- other properties -->
+    <!-- other properties -->
 </bean>
 ```
 
@@ -309,16 +305,16 @@ Bean属性或者构造函数使用表达式的方式如下：
 ```
 public static class FieldValueTestBean
 
-	@Value("#{ systemProperties['user.region'] }")
-	private String defaultLocale;
+    @Value("#{ systemProperties['user.region'] }")
+    private String defaultLocale;
 
-	public void setDefaultLocale(String defaultLocale) {
-		this.defaultLocale = defaultLocale;
-	}
+    public void setDefaultLocale(String defaultLocale) {
+        this.defaultLocale = defaultLocale;
+    }
 
-	public String getDefaultLocale() {
-		return this.defaultLocale;
-	}
+    public String getDefaultLocale() {
+        return this.defaultLocale;
+    }
 
 }
 ```
@@ -328,16 +324,16 @@ public static class FieldValueTestBean
 ```
 public static class PropertyValueTestBean
 
-	private String defaultLocale;
+    private String defaultLocale;
 
-	@Value("#{ systemProperties['user.region'] }")
-	public void setDefaultLocale(String defaultLocale) {
-		this.defaultLocale = defaultLocale;
-	}
+    @Value("#{ systemProperties['user.region'] }")
+    public void setDefaultLocale(String defaultLocale) {
+        this.defaultLocale = defaultLocale;
+    }
 
-	public String getDefaultLocale() {
-		return this.defaultLocale;
-	}
+    public String getDefaultLocale() {
+        return this.defaultLocale;
+    }
 
 }
 ```
@@ -347,35 +343,35 @@ public static class PropertyValueTestBean
 ```
 public class SimpleMovieLister {
 
-	private MovieFinder movieFinder;
-	private String defaultLocale;
+    private MovieFinder movieFinder;
+    private String defaultLocale;
 
-	@Autowired
-	public void configure(MovieFinder movieFinder,
-			@Value("#{ systemProperties['user.region'] }") String defaultLocale) {
-		this.movieFinder = movieFinder;
-		this.defaultLocale = defaultLocale;
-	}
+    @Autowired
+    public void configure(MovieFinder movieFinder,
+            @Value("#{ systemProperties['user.region'] }") String defaultLocale) {
+        this.movieFinder = movieFinder;
+        this.defaultLocale = defaultLocale;
+    }
 
-	// ...
+    // ...
 }
 ```
 
 ```
 public class MovieRecommender {
 
-	private String defaultLocale;
+    private String defaultLocale;
 
-	private CustomerPreferenceDao customerPreferenceDao;
+    private CustomerPreferenceDao customerPreferenceDao;
 
-	@Autowired
-	public MovieRecommender(CustomerPreferenceDao customerPreferenceDao,
-			@Value("#{systemProperties['user.country']}") String defaultLocale) {
-		this.customerPreferenceDao = customerPreferenceDao;
-		this.defaultLocale = defaultLocale;
-	}
+    @Autowired
+    public MovieRecommender(CustomerPreferenceDao customerPreferenceDao,
+            @Value("#{systemProperties['user.country']}") String defaultLocale) {
+        this.customerPreferenceDao = customerPreferenceDao;
+        this.defaultLocale = defaultLocale;
+    }
 
-	// ...
+    // ...
 }
 ```
 
@@ -427,19 +423,19 @@ StandardEvaluationContext teslaContext = new StandardEvaluationContext(tesla);
 
 // evaluates to "Induction motor"
 String invention = parser.parseExpression("inventions[3]").getValue(
-		teslaContext, String.class);
+        teslaContext, String.class);
 
 // Members List
 StandardEvaluationContext societyContext = new StandardEvaluationContext(ieee);
 
 // evaluates to "Nikola Tesla"
 String name = parser.parseExpression("Members[0].Name").getValue(
-		societyContext, String.class);
+        societyContext, String.class);
 
 // List and Array navigation
 // evaluates to "Wireless communication"
 String invention = parser.parseExpression("Members[0].Inventions[6]").getValue(
-		societyContext, String.class);
+        societyContext, String.class);
 ```
 
 Maps的值由方括号内指定字符串的Key来标识引用。在下面这个例子中，因为Officers map的Key是string类型，我们可以用过字符串常量指定。
@@ -448,15 +444,15 @@ Maps的值由方括号内指定字符串的Key来标识引用。在下面这个�
 // Officer's Dictionary
 
 Inventor pupin = parser.parseExpression("Officers['president']").getValue(
-		societyContext, Inventor.class);
+        societyContext, Inventor.class);
 
 // evaluates to "Idvor"
 String city = parser.parseExpression("Officers['president'].PlaceOfBirth.City").getValue(
-		societyContext, String.class);
+        societyContext, String.class);
 
 // setting values
 parser.parseExpression("Officers['advisors'][0].PlaceOfBirth.Country").setValue(
-		societyContext, "Croatia");
+        societyContext, "Croatia");
 ```
 
 ### **6.5.3 内联列表**
@@ -511,7 +507,7 @@ String c = parser.parseExpression("'abc'.substring(2, 3)").getValue(String.class
 
 // evaluates to true
 boolean isMember = parser.parseExpression("isMember('Mihajlo Pupin')").getValue(
-		societyContext, Boolean.class);
+        societyContext, Boolean.class);
 ```
 
 ### **6.5.7 运算符**
@@ -582,7 +578,7 @@ boolean falseValue = parser.parseExpression(expression).getValue(societyContext,
 int two = parser.parseExpression("1 + 1").getValue(Integer.class); // 2
 
 String testString = parser.parseExpression(
-		"'test' + ' ' + 'string'").getValue(String.class); // 'test string'
+        "'test' + ' ' + 'string'").getValue(String.class); // 'test string'
 
 // Subtraction
 int four = parser.parseExpression("1 - -3").getValue(Integer.class); // 4
@@ -621,7 +617,7 @@ parser.parseExpression("Name").setValue(inventorContext, "Alexander Seovic2");
 // alternatively
 
 String aleks = parser.parseExpression(
-		"Name = 'Alexandar Seovic'").getValue(inventorContext, String.class);
+        "Name = 'Alexandar Seovic'").getValue(inventorContext, String.class);
 ```
 
 ### **6.5.9 类型**
@@ -636,8 +632,8 @@ Class dateClass = parser.parseExpression("T(java.util.Date)").getValue(Class.cla
 Class stringClass = parser.parseExpression("T(String)").getValue(Class.class);
 
 boolean trueValue = parser.parseExpression(
-		"T(java.math.RoundingMode).CEILING &amp;lt; T(java.math.RoundingMode).FLOOR")
-		.getValue(Boolean.class);
+        "T(java.math.RoundingMode).CEILING &amp;lt; T(java.math.RoundingMode).FLOOR")
+        .getValue(Boolean.class);
 ```
 
 ### **6.5.10 构造器**
@@ -656,55 +652,33 @@ boolean trueValue = parser.parseExpression(
 
 你可以扩展SpEL，在表达式字符串中使用自定义函数。这些自定义函数是通过StandardEvaluationContext的registerFunction来注册的
 
-
-
 首先定义一个Java方法作为函数的实现、例如下面是一个将字符串反转的方法。
 
-
-
 然后将这个方法注册到求值上下文中就可以应用到表达式字符串中。
-
-
 
 ### **6.5.13 Bean引用**
 
 如果求值上下文已设置bean解析器，可以在表达式中使用（@）符合来查找Bean
 
-
-
 如果是访问工厂Bean，bean名字前需要添加前缀\(&\)符号
-
-
 
 ### **6.5.14 三元操作符 \(If-Then-Else\)**
 
 你可以在表达式中使用三元操作符来实现if-then-else的条件逻辑。下面是一个小例子：
 
-
-
 在这个例子中，因为布尔值false返回的结果一定是’falseExp’。下面是一个更实际的例子。
-
-
 
 ### **6.5.15 Elvis运算符**
 
 Elvis运算符可以简化Java的三元操作符，是Groovy中使用的一种操作符。如果使用三元操作符语法你通常需要重复写两次变量名，例如：
 
-
-
 使用Elvis运算符可以简化写法，这个符号的名字由来是它很像Elvis的发型（译者注：Elvis=Elvis Presley，猫王，著名摇滚歌手）
 
-
-
 下面是一个复杂一点的例子:
-
-
 
 ### **6.5.16 安全引用运算符**
 
 安全引用运算符主要为了避免空指针，源于Groovy语言。很多时候你引用一个对象的方法或者属性时都需要做非空校验。为了避免此类问题、使用安全引用运算符只会返回null而不是抛出一个异常。
-
-
 
 > 备注：Elvis操作符可以在表达式中赋默认值，例如。在一个@Value表达式中：@Value\(“\#{systemProperties\[‘pop3.port’\] ?: 25}”\)  
 > 上面的例子如果系统属性pop3.port已定义会直接注入，如果未定义，则返回默认值25.
@@ -717,32 +691,21 @@ Elvis运算符可以简化Java的三元操作符，是Groovy中使用的一种�
 
 下面的例子中表达式会返回一个新的map,包含原map中值小于27的所有子项。
 
-
-
 除了可以返回所有被选择的元素，也可以只返回第一或者最后一项。返回第一项的选择语法是：
-
-  
-
 
 ^\[…​\]，返回最后一项的选择语法是 $\[…​\].
 
-**6.5.18 集合投影**
+### **6.5.18 集合投影**
 
 投影使得一个集合通过子表达式求值，并返回一个新的结果。投影的语法是 !\[projectionExpression\]. 举一个通俗易懂的例子，假设我们有一个inventors 对象列表，但是我们想返回每一个inventor出生的城市列表。我们需要遍历inventor的每一项，通过 ‘placeOfBirth.city’来求值。下面是具体的代码例子：
 
-
-
 也可以在Map上使用投影、在这种场景下投影表达式会作用于Map的每一项（类型为Java的Map.Entry）。Map项的Key和alue都可以作为选择器的比较选项Map投影的结果是一个list，包含map每一项被投影表达式求值后的结果。
 
-**6.5.19 表达式模板**
+### **6.5.19 表达式模板**
 
 表达式模板运行在一段文本中混合包含一个或多个求值表达式模块。各个求值块都通过可被自定义的前后缀字符分隔，一个通用的选择是使用\#{ }作为分隔符。例如：
 
-
-
 求值的字符串是通过字符文本’random number is’以及\#{}分隔符中的表达式求值结果拼接起来的，在这个例子中就是调用random\(\)的结果。方法parseExpression\(\)的第二个传入参数类型是ParserContext。ParserContext接口用来确定表达式该如何被解析、从而支持表达式的模板功能。其实现类TemplateParserContext的定义如下：
-
-
 
 ## **6.6 本章节例子中使用的类**
 
@@ -756,26 +719,131 @@ import java.util.GregorianCalendar;
 
 public class Inventor {
 
+    private String name;
+    private String nationality;
+    private String[] inventions;
+    private Date birthdate;
+    private PlaceOfBirth placeOfBirth;
+
+    public Inventor(String name, String nationality) {
+        GregorianCalendar c= new GregorianCalendar();
+        this.name = name;
+        this.nationality = nationality;
+        this.birthdate = c.getTime();
+    }
+
+    public Inventor(String name, Date birthdate, String nationality) {
+        this.name = name;
+        this.nationality = nationality;
+        this.birthdate = birthdate;
+    }
+
+    public Inventor() {
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
+    }
+
+    public Date getBirthdate() {
+        return birthdate;
+    }
+
+    public void setBirthdate(Date birthdate) {
+        this.birthdate = birthdate;
+    }
+
+    public PlaceOfBirth getPlaceOfBirth() {
+        return placeOfBirth;
+    }
+
+    public void setPlaceOfBirth(PlaceOfBirth placeOfBirth) {
+        this.placeOfBirth = placeOfBirth;
+    }
+
+    public void setInventions(String[] inventions) {
+        this.inventions = inventions;
+    }
+
+    public String[] getInventions() {
+        return inventions;
+    }
+}
+```
+
+PlaceOfBirth.java
+
+```
+package org.spring.samples.spel.inventor;
+
+public class PlaceOfBirth {
+
+	private String city;
+	private String country;
+
+	public PlaceOfBirth(String city) {
+		this.city=city;
+	}
+
+	public PlaceOfBirth(String city, String country) {
+		this(city);
+		this.country = country;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String s) {
+		this.city = s;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+}
+```
+
+Society.java
+
+```
+package org.spring.samples.spel.inventor;
+
+import java.util.*;
+
+public class Society {
+
 	private String name;
-	private String nationality;
-	private String[] inventions;
-	private Date birthdate;
-	private PlaceOfBirth placeOfBirth;
 
-	public Inventor(String name, String nationality) {
-		GregorianCalendar c= new GregorianCalendar();
-		this.name = name;
-		this.nationality = nationality;
-		this.birthdate = c.getTime();
+	public static String Advisors = "advisors";
+	public static String President = "president";
+
+	private List&amp;lt;Inventor&amp;gt; members = new ArrayList&amp;lt;Inventor&amp;gt;();
+	private Map officers = new HashMap();
+
+	public List getMembers() {
+		return members;
 	}
 
-	public Inventor(String name, Date birthdate, String nationality) {
-		this.name = name;
-		this.nationality = nationality;
-		this.birthdate = birthdate;
-	}
-
-	public Inventor() {
+	public Map getOfficers() {
+		return officers;
 	}
 
 	public String getName() {
@@ -786,37 +854,15 @@ public class Inventor {
 		this.name = name;
 	}
 
-	public String getNationality() {
-		return nationality;
+	public boolean isMember(String name) {
+		for (Inventor inventor : members) {
+			if (inventor.getName().equals(name)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
-	public void setNationality(String nationality) {
-		this.nationality = nationality;
-	}
-
-	public Date getBirthdate() {
-		return birthdate;
-	}
-
-	public void setBirthdate(Date birthdate) {
-		this.birthdate = birthdate;
-	}
-
-	public PlaceOfBirth getPlaceOfBirth() {
-		return placeOfBirth;
-	}
-
-	public void setPlaceOfBirth(PlaceOfBirth placeOfBirth) {
-		this.placeOfBirth = placeOfBirth;
-	}
-
-	public void setInventions(String[] inventions) {
-		this.inventions = inventions;
-	}
-
-	public String[] getInventions() {
-		return inventions;
-	}
 }
 ```
 
