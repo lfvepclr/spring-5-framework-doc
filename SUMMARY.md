@@ -13,5 +13,5 @@
 * [20. CORS支持](20-cors-support.md)
 * [29. 邮件](29-email.md)
 * [21. 与其他Web框架集成 ](21-integrating-with-other-web-frameworks.md)
-* [24-Remoting-and-web-services-using-Spring](24-remoting-and-web-services-using-spring.md)
+* [24. 使用Spring提供远程和WEB服务](24-remoting-and-web-services-using-spring.md)
 
