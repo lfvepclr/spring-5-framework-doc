@@ -4,7 +4,7 @@
 
 本章涵盖了Spring框架实现控制反转（IoC）[\[1\]](http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/html/beans.html#ftn.d5e685)的原理。IoC又叫依赖注入（DI）。它描述了对象的定义和依赖的一个过程，也就是说，依赖的对象通过构造参数、工厂方法参数或者属性注入，当对象实例化后依赖的对象才被创建，当创建bean后容器注入这些依赖对象。这个过程基本上是反向的，因此命名为控制反转（IoC），它通过直接使用构造类来控制实例化，或者定义它们之间的依赖关系，或者类似于服务定位模式的一种机制。
 
-`org.springframework.beans`和`org.springframework.context`是Spring框架中IoC容器的基础，[`BeanFactory`](http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/beans/factory/BeanFactory.html)接口提供一种高级的配置机制能够管理任何类型的对象。[`ApplicationContext`](http://ifeve.com/spring-ioc-1-2/href="http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/context/ApplicationContext.html)是`BeanFactory`的子接口。它能更容易集成Spring的AOP功能、消息资源处理（比如在国际化中使用）、事件发布和特定的上下文应用层比如在网站应用中的`WebApplicationContext。`
+`org.springframework.beans`和`org.springframework.context`是Spring框架中IoC容器的基础，[`BeanFactory`](http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/beans/factory/BeanFactory.html)接口提供一种高级的配置机制能够管理任何类型的对象。\[`ApplicationContext`\]\([http://ifeve.com/spring-ioc-1-2/href="http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/context/ApplicationContext.html\)是\`BeanFactory\`的子接口。它能更容易集成Spring的AOP功能、消息资源处理（比如在国际化中使用）、事件发布和特定的上下文应用层比如在网站应用中的\`WebApplicationContext。\`](http://ifeve.com/spring-ioc-1-2/href="http://docs.spring.io/spring-framework/docs/5.0.0.M5/javadoc-api/org/springframework/context/ApplicationContext.html%29是`BeanFactory`的子接口。它能更容易集成Spring的AOP功能、消息资源处理（比如在国际化中使用）、事件发布和特定的上下文应用层比如在网站应用中的`WebApplicationContext。`)
 
 总之，`BeanFactory`提供了配置框架和基本方法，`ApplicationContext`添加更多的企业特定的功能。`ApplicationContext`是`BeanFactory`的一个子接口，在本章它被专门用于Spring的IoC容器描述。更多关于使用`BeanFactory`替代`ApplicationContext`的信息请参考[章节 3.16, “The BeanFactory”](http://ifeve.com/spring-ioc-1-2/beans.html#beans-beanfactory)。
 
@@ -72,7 +72,7 @@ id属性用来使用标识每个独立的bean定义的字符串。`class`属性�
 
 从Spring3.0开始，Spring提供了对JSR-330标准注解\(依赖注入\)的支持。这些注解和Spring的注解以相同的方式进行扫描。你只需要在你的classpath中添加有关的jar包。
 
-> 如果你使用maven，javax.inject 存在标准的maven库中\([http://repo1.maven.org/maven2/javax/inject/javax.inject/1/](http://repo1.maven.org/maven2/javax/inject/javax.inject/1/)\)，你可以将下面的依赖加入到你的pom.xml: 
+> 如果你使用maven，javax.inject 存在标准的maven库中\([http://repo1.maven.org/maven2/javax/inject/javax.inject/1/](http://repo1.maven.org/maven2/javax/inject/javax.inject/1/)\)，你可以将下面的依赖加入到你的pom.xml:
 >
 > ```
 > <dependency>
@@ -409,6 +409,25 @@ public class AppConfig {
 <beans>
     <bean id="transferService" class="com.acme.TransferServiceImpl"/>
 </beans>
+```
+
+两种声明都可以使得一个名为transferService的bean在ApplicationContext可用，绑定到TransferServiceImpl类型的对象实例上：
+
+transferService -&gt; com.acme.TransferServiceImpl
+
+**Bean 依赖**
+
+@Bean注解方法可以具有描述构建该bean所需依赖关系的任意数量的参数。例如，如果我们的TransferService需要一个AccountRepository，我们可以通过一个方法参数实现该依赖：
+
+```
+@Configuration
+public class AppConfig {
+
+    @Bean
+    public TransferService transferService(AccountRepository accountRepository) {
+        return new TransferServiceImpl(accountRepository);
+    }
+}
 ```
 
 
