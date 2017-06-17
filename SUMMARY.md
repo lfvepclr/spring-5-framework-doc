@@ -11,4 +11,5 @@
 * [16. ORM](/16-orm.md)
 * [19. 视图技术](19-view-technologies.md)
 * [29. 邮件](29-email.md)
+* [20. CORS支持](20-cors-support.md)
 
