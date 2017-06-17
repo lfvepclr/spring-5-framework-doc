@@ -15,7 +15,4 @@
 * [21. 与其他Web框架集成 ](21-integrating-with-other-web-frameworks.md)
 * [24. 使用Spring提供远程和WEB服务](24-remoting-and-web-services-using-spring.md)
 * [29. 邮件](29-email.md)
-* [3.2 容器概述](3-1.md)
-
-
 
