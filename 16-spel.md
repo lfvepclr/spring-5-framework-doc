@@ -640,45 +640,189 @@ boolean trueValue = parser.parseExpression(
 
 构造器可以使用new操作符来调用。除了元数据类型和String（比如int,float等可以直接使用）都需要限定类的全名。
 
+```
+nventor einstein = p.parseExpression(
+		"new org.spring.samples.spel.inventor.Inventor('Albert Einstein', 'German')")
+		.getValue(Inventor.class);
+
+//create new inventor instance within add method of List
+p.parseExpression(
+		"Members.add(new org.spring.samples.spel.inventor.Inventor(
+			'Albert Einstein', 'German'))").getValue(societyContext);
+```
+
 ### **6.5.11 变量**
 
 表达式中的变量可以通过语法\#变量名使用。变量可以在StandardEvaluationContext中通过方法setVariable设置。
+
+```
+Inventor tesla = new Inventor("Nikola Tesla", "Serbian");
+StandardEvaluationContext context = new StandardEvaluationContext(tesla);
+context.setVariable("newName", "Mike Tesla");
+
+parser.parseExpression("Name = #newName").getValue(context);
+
+System.out.println(tesla.getName()) // "Mike Tesla"
+```
 
 #### **\#this和\#root变量**
 
 \#this变量永远指向当前表达式正在求值的对象（这时不需要限定全名）。变量\#root总是指向根上下文对象。\#this在表达式不同部分解析过程中可能会改变，但是\#root总是指向根
 
+```
+// create an array of integers
+List<Integer> primes = new ArrayList<Integer>();
+primes.addAll(Arrays.asList(2,3,5,7,11,13,17));
+
+// create parser and set variable 'primes' as the array of integers
+ExpressionParser parser = new SpelExpressionParser();
+StandardEvaluationContext context = new StandardEvaluationContext();
+context.setVariable("primes",primes);
+
+// all prime numbers > 10 from the list (using selection ?{...})
+// evaluates to [11, 13, 17]
+List<Integer> primesGreaterThanTen = (List<Integer>) parser.parseExpression(
+		"#primes.?[#this>10]").getValue(context);
+```
+
 ### **6.5.12 函数**
 
 你可以扩展SpEL，在表达式字符串中使用自定义函数。这些自定义函数是通过StandardEvaluationContext的registerFunction来注册的
 
+```
+public void registerFunction(String name, Method m)
+```
+
 首先定义一个Java方法作为函数的实现、例如下面是一个将字符串反转的方法。
 
+```
+public abstract class StringUtils {
+
+	public static String reverseString(String input) {
+		StringBuilder backwards = new StringBuilder();
+		for (int i = 0; i &amp;lt; input.length(); i++)
+			backwards.append(input.charAt(input.length() - 1 - i));
+		}
+		return backwards.toString();
+	}
+}
+```
+
 然后将这个方法注册到求值上下文中就可以应用到表达式字符串中。
+
+```
+ExpressionParser parser = new SpelExpressionParser();
+StandardEvaluationContext context = new StandardEvaluationContext();
+
+context.registerFunction("reverseString",
+	StringUtils.class.getDeclaredMethod("reverseString", new Class[] { String.class }));
+
+String helloWorldReversed = parser.parseExpression(
+	"#reverseString('hello')").getValue(context, String.class);
+```
 
 ### **6.5.13 Bean引用**
 
 如果求值上下文已设置bean解析器，可以在表达式中使用（@）符合来查找Bean
 
+```
+ExpressionParser parser = new SpelExpressionParser();
+StandardEvaluationContext context = new StandardEvaluationContext();
+context.setBeanResolver(new MyBeanResolver());
+
+// This will end up calling resolve(context,"foo") on MyBeanResolver during evaluation
+Object bean = parser.parseExpression("@foo").getValue(context);
+```
+
 如果是访问工厂Bean，bean名字前需要添加前缀\(&\)符号
+
+```
+ExpressionParser parser = new SpelExpressionParser();
+StandardEvaluationContext context = new StandardEvaluationContext();
+context.setBeanResolver(new MyBeanResolver());
+
+// This will end up calling resolve(context,"&amp;amp;foo") on MyBeanResolver during evaluation
+Object bean = parser.parseExpression("&amp;amp;foo").getValue(context);
+```
 
 ### **6.5.14 三元操作符 \(If-Then-Else\)**
 
 你可以在表达式中使用三元操作符来实现if-then-else的条件逻辑。下面是一个小例子：
 
+```
+String falseString = parser.parseExpression(
+		"false ? 'trueExp' : 'falseExp'").getValue(String.class);
+```
+
 在这个例子中，因为布尔值false返回的结果一定是’falseExp’。下面是一个更实际的例子。
+
+```
+parser.parseExpression("Name").setValue(societyContext, "IEEE");
+societyContext.setVariable("queryName", "Nikola Tesla");
+
+expression = "isMember(#queryName)? #queryName + ' is a member of the ' " +
+		"+ Name + ' Society' : #queryName + ' is not a member of the ' + Name + ' Society'";
+```
 
 ### **6.5.15 Elvis运算符**
 
 Elvis运算符可以简化Java的三元操作符，是Groovy中使用的一种操作符。如果使用三元操作符语法你通常需要重复写两次变量名，例如：
 
+```
+String name = "Elvis Presley";
+String displayName = name != null ? name : "Unknown";
+```
+
 使用Elvis运算符可以简化写法，这个符号的名字由来是它很像Elvis的发型（译者注：Elvis=Elvis Presley，猫王，著名摇滚歌手）
 
+```
+ExpressionParser parser = new SpelExpressionParser();
+
+String name = parser.parseExpression("name?:'Unknown'").getValue(String.class);
+
+System.out.println(name); // 'Unknown'
+```
+
 下面是一个复杂一点的例子:
+
+```
+ExpressionParser parser = new SpelExpressionParser();
+
+Inventor tesla = new Inventor("Nikola Tesla", "Serbian");
+StandardEvaluationContext context = new StandardEvaluationContext(tesla);
+
+String name = parser.parseExpression("Name?:'Elvis Presley'").getValue(context, String.class);
+
+System.out.println(name); // Nikola Tesla
+
+tesla.setName(null);
+
+name = parser.parseExpression("Name?:'Elvis Presley'").getValue(context, String.class);
+
+System.out.println(name); // Elvis Presley
+```
 
 ### **6.5.16 安全引用运算符**
 
 安全引用运算符主要为了避免空指针，源于Groovy语言。很多时候你引用一个对象的方法或者属性时都需要做非空校验。为了避免此类问题、使用安全引用运算符只会返回null而不是抛出一个异常。
+
+```
+ExpressionParser parser = new SpelExpressionParser();
+
+Inventor tesla = new Inventor("Nikola Tesla", "Serbian");
+tesla.setPlaceOfBirth(new PlaceOfBirth("Smiljan"));
+
+StandardEvaluationContext context = new StandardEvaluationContext(tesla);
+
+String city = parser.parseExpression("PlaceOfBirth?.City").getValue(context, String.class);
+System.out.println(city); // Smiljan
+
+tesla.setPlaceOfBirth(null);
+
+city = parser.parseExpression("PlaceOfBirth?.City").getValue(context, String.class);
+
+System.out.println(city); // null - does not throw NullPointerException!!!
+```
 
 > 备注：Elvis操作符可以在表达式中赋默认值，例如。在一个@Value表达式中：@Value\(“\#{systemProperties\[‘pop3.port’\] ?: 25}”\)  
 > 上面的例子如果系统属性pop3.port已定义会直接注入，如果未定义，则返回默认值25.
@@ -687,9 +831,18 @@ Elvis运算符可以简化Java的三元操作符，是Groovy中使用的一种�
 
 该功能是SpEL中一项强大的语言特性，允许你将源集合选择其中的某几项生成另外一个集合。选择器使用语法.?\[selectionExpression\].通过该表达式可以过滤集合并返回原集合中的子集。例如，下面的例子我们返回inventors对象中的国籍为塞尔维亚的子集：
 
+```
+List<Inventor> list = (List<Inventor>) parser.parseExpression(
+		"Members.?[Nationality == 'Serbian']").getValue(societyContext);
+```
+
 筛选可以同时在list和maps上面使用。对于list来说是选择的标准是针对单个列表的每一项来比对求值，对于map来说选择的标准是针对Map的每一项（类型为Java的Map.Entry）。Map项的Key和alue都可以作为筛选的比较选项
 
 下面的例子中表达式会返回一个新的map,包含原map中值小于27的所有子项。
+
+```
+Map newMap = parser.parseExpression("map.?[value<27]").getValue();
+```
 
 除了可以返回所有被选择的元素，也可以只返回第一或者最后一项。返回第一项的选择语法是：
 
@@ -699,13 +852,43 @@ Elvis运算符可以简化Java的三元操作符，是Groovy中使用的一种�
 
 投影使得一个集合通过子表达式求值，并返回一个新的结果。投影的语法是 !\[projectionExpression\]. 举一个通俗易懂的例子，假设我们有一个inventors 对象列表，但是我们想返回每一个inventor出生的城市列表。我们需要遍历inventor的每一项，通过 ‘placeOfBirth.city’来求值。下面是具体的代码例子：
 
+```
+// returns ['Smiljan', 'Idvor' ]
+List placesOfBirth = (List)parser.parseExpression("Members.![placeOfBirth.city]");
+```
+
 也可以在Map上使用投影、在这种场景下投影表达式会作用于Map的每一项（类型为Java的Map.Entry）。Map项的Key和alue都可以作为选择器的比较选项Map投影的结果是一个list，包含map每一项被投影表达式求值后的结果。
 
 ### **6.5.19 表达式模板**
 
 表达式模板运行在一段文本中混合包含一个或多个求值表达式模块。各个求值块都通过可被自定义的前后缀字符分隔，一个通用的选择是使用\#{ }作为分隔符。例如：
 
+```
+String randomPhrase = parser.parseExpression(
+		"random number is #{T(java.lang.Math).random()}",
+		new TemplateParserContext()).getValue(String.class);
+
+// evaluates to "random number is 0.7038186818312008"
+```
+
 求值的字符串是通过字符文本’random number is’以及\#{}分隔符中的表达式求值结果拼接起来的，在这个例子中就是调用random\(\)的结果。方法parseExpression\(\)的第二个传入参数类型是ParserContext。ParserContext接口用来确定表达式该如何被解析、从而支持表达式的模板功能。其实现类TemplateParserContext的定义如下：
+
+```
+public class TemplateParserContext implements ParserContext {
+
+	public String getExpressionPrefix() {
+		return "#{";
+	}
+
+	public String getExpressionSuffix() {
+		return "}";
+	}
+
+	public boolean isTemplate() {
+		return true;
+	}
+}
+```
 
 ## **6.6 本章节例子中使用的类**
 
@@ -790,33 +973,33 @@ package org.spring.samples.spel.inventor;
 
 public class PlaceOfBirth {
 
-	private String city;
-	private String country;
+    private String city;
+    private String country;
 
-	public PlaceOfBirth(String city) {
-		this.city=city;
-	}
+    public PlaceOfBirth(String city) {
+        this.city=city;
+    }
 
-	public PlaceOfBirth(String city, String country) {
-		this(city);
-		this.country = country;
-	}
+    public PlaceOfBirth(String city, String country) {
+        this(city);
+        this.country = country;
+    }
 
-	public String getCity() {
-		return city;
-	}
+    public String getCity() {
+        return city;
+    }
 
-	public void setCity(String s) {
-		this.city = s;
-	}
+    public void setCity(String s) {
+        this.city = s;
+    }
 
-	public String getCountry() {
-		return country;
-	}
+    public String getCountry() {
+        return country;
+    }
 
-	public void setCountry(String country) {
-		this.country = country;
-	}
+    public void setCountry(String country) {
+        this.country = country;
+    }
 
 }
 ```
@@ -830,38 +1013,38 @@ import java.util.*;
 
 public class Society {
 
-	private String name;
+    private String name;
 
-	public static String Advisors = "advisors";
-	public static String President = "president";
+    public static String Advisors = "advisors";
+    public static String President = "president";
 
-	private List&amp;lt;Inventor&amp;gt; members = new ArrayList&amp;lt;Inventor&amp;gt;();
-	private Map officers = new HashMap();
+    private List&amp;lt;Inventor&amp;gt; members = new ArrayList&amp;lt;Inventor&amp;gt;();
+    private Map officers = new HashMap();
 
-	public List getMembers() {
-		return members;
-	}
+    public List getMembers() {
+        return members;
+    }
 
-	public Map getOfficers() {
-		return officers;
-	}
+    public Map getOfficers() {
+        return officers;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public boolean isMember(String name) {
-		for (Inventor inventor : members) {
-			if (inventor.getName().equals(name)) {
-				return true;
-			}
-		}
-		return false;
-	}
+    public boolean isMember(String name) {
+        for (Inventor inventor : members) {
+            if (inventor.getName().equals(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }
 ```
