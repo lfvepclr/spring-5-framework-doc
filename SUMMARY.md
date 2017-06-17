@@ -2,8 +2,8 @@
 
 * [Introduction](README.md)
 * [1. 入门指南](1-Getting-Started-with-Spring.md)
-* [2. 介绍Spring框架](/2.md)
-  * [2.1依赖注入和控制反转](/2-1.md)
+* [2. 介绍Spring框架](/2/2.md)
+  * [2.1依赖注入和控制反转](/3/3-1.md)
   * [2.2模块](/2-2.md)
   * [2.3使用场景](/2-3.md)
 * [3. IoC容器](/3-1.md)
