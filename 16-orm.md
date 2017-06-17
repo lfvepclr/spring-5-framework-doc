@@ -1,3 +1,5 @@
+## 16. ORM
+
 ## 16.1 介绍一下Spring中的ORM
 
 Spring框架在实现资源管理、数据访问对象（DAO）层，和事务策略等方面，支持对Java持久化API（JPA）以及原生Hibernate的集成。以Hibernate举例来说，Spring有非常赞的IoC功能，可以解决许多典型的Hibernate配置和集成问题。开发者可以通过依赖注入来配置O-R（对象关系）映射组件支持的特性。Hibernate的这些特性可以参与Spring的资源和事务管理，并且符合Spring的通用事务和DAO层的异常体系。因此，Spring团队推荐开发者使用Spring集成的方式来开发DAO层，而不是使用原生的Hibernate或者JPA的API。老版本的Spring DAO模板现在不推荐使用了，想了解这部分内容可以参考[经典ORM使用](http://docs.spring.io/spring/docs/5.0.0.M5/spring-framework-reference/html/classic-spring.html#classic-spring-orm)一节。
@@ -6,13 +8,13 @@ Spring框架在实现资源管理、数据访问对象（DAO）层，和事务�
 
 开发者使用Spring框架来中创建自己的ORM DAO的好处如下：
 
-* *易于测试*。Spring IoC的模式使得开发者可以轻易的替换Hibernate的`SessionFactory`实例，JDBC的`DataSource`
-实例，事务管理器，以及映射对象（如果有必要）的配置和实现。这一特点十分利于开发者对每个模块进行独立的测试。
-* *泛化数据访问异常*。Spring可以将ORM工具的异常封装起来，将所有异常（可以是受检异常）封装成运行时的`DataAccessException`体系。这一特性可以令开发者在合适的逻辑层上处理绝大多数不可修复的持久化异常，避免了大量的`catch`,`throw`和异常的声明。开发者还可以按需来处理这些异常。其中，JDBC异常（包括一些特定DB语言）都会被封装为相同的体系，意味着开发者即使使用不同的JDBC操作，基于不同的DB，也可以保证一致的编程模型。
-* *通用的资源管理*。Spring的应用上下文可以通过处理配置源的位置来灵活配置Hibernate的`SessionFactory`实例，JPA的`EntityManagerFactory`实例，JDBC的`DataSource`实例以及其他类似的资源。Spring的这一特性使得这些实例的配置十分易于管理和修改。同时，Spring还为处理持久化资源的配置提供了高效，易用和安全的处理方式。举个例子，有些代码使用了Hibernate需要使用相同的`Session`来确保高效性和正确的事务处理。Spring通过Hibernate的`SessionFactory`来获取当前的`Session`，来透明的将`Session`绑定到当前的线程。Srping为任何本地或者JTA事务环境解决了在使用Hibernate时碰到的一些常见问题。
-* *集成事务管理*。开发者可以通过`@Transactional`注解或在XML配置文件中显式配置事务AOP Advise拦截，将ORM代码封装在声明式的AOP方法拦截器中。事务的语义和异常处理（回滚等）都可以根据开发者自己的需求来定制。在后面的章节中，*资源和事务管理*中，开发者可以在不影响ORM相关代码的情况下替换使用不同的事务管理器。例如，开发者可以在本地事务和JTA之间进行交换，并在两种情况下具有相同的完整服务（如声明式事务）。而且，JDBC相关的代码在事务上完全和处理ORM部分的代码集成。这对于不适用于ORM的数据访问非常有用，例如批处理和BLOB流式传输，仍然需要与ORM操作共享常见事务。
+* _易于测试_。Spring IoC的模式使得开发者可以轻易的替换Hibernate的`SessionFactory`实例，JDBC的`DataSource`
+  实例，事务管理器，以及映射对象（如果有必要）的配置和实现。这一特点十分利于开发者对每个模块进行独立的测试。
+* _泛化数据访问异常_。Spring可以将ORM工具的异常封装起来，将所有异常（可以是受检异常）封装成运行时的`DataAccessException`体系。这一特性可以令开发者在合适的逻辑层上处理绝大多数不可修复的持久化异常，避免了大量的`catch`,`throw`和异常的声明。开发者还可以按需来处理这些异常。其中，JDBC异常（包括一些特定DB语言）都会被封装为相同的体系，意味着开发者即使使用不同的JDBC操作，基于不同的DB，也可以保证一致的编程模型。
+* _通用的资源管理_。Spring的应用上下文可以通过处理配置源的位置来灵活配置Hibernate的`SessionFactory`实例，JPA的`EntityManagerFactory`实例，JDBC的`DataSource`实例以及其他类似的资源。Spring的这一特性使得这些实例的配置十分易于管理和修改。同时，Spring还为处理持久化资源的配置提供了高效，易用和安全的处理方式。举个例子，有些代码使用了Hibernate需要使用相同的`Session`来确保高效性和正确的事务处理。Spring通过Hibernate的`SessionFactory`来获取当前的`Session`，来透明的将`Session`绑定到当前的线程。Srping为任何本地或者JTA事务环境解决了在使用Hibernate时碰到的一些常见问题。
+* _集成事务管理_。开发者可以通过`@Transactional`注解或在XML配置文件中显式配置事务AOP Advise拦截，将ORM代码封装在声明式的AOP方法拦截器中。事务的语义和异常处理（回滚等）都可以根据开发者自己的需求来定制。在后面的章节中，_资源和事务管理_中，开发者可以在不影响ORM相关代码的情况下替换使用不同的事务管理器。例如，开发者可以在本地事务和JTA之间进行交换，并在两种情况下具有相同的完整服务（如声明式事务）。而且，JDBC相关的代码在事务上完全和处理ORM部分的代码集成。这对于不适用于ORM的数据访问非常有用，例如批处理和BLOB流式传输，仍然需要与ORM操作共享常见事务。
 
-> 为了更全面的ORM支持，包括支持其他类型的数据库技术（如MongoDB），开发者可能需要查看[Spring Data](http://projects.spring.io/spring-data/)系列项目。如果开发者是JPA用户，则可以从https://spring.io的查阅[开始使用JPA访问数据指南](https://spring.io/guides/gs/accessing-data-jpa/)一文进行简单了解。
+> 为了更全面的ORM支持，包括支持其他类型的数据库技术（如MongoDB），开发者可能需要查看[Spring Data](http://projects.spring.io/spring-data/)系列项目。如果开发者是JPA用户，则可以从[https://spring.io的查阅\[开始使用JPA访问数据指南\]\(https://spring.io/guides/gs/accessing-data-jpa/\)一文进行简单了解。](https://spring.io的查阅[开始使用JPA访问数据指南]%28https://spring.io/guides/gs/accessing-data-jpa/%29一文进行简单了解。)
 
 ## 16.2 集成ORM的注意事项
 
@@ -36,17 +38,18 @@ Spring的基础设施提供了合适的资源处理，同时Spring引入了DAO�
 @Repository
 public class ProductDaoImpl implements ProductDao {
 
-	// class body here...
+    // class body here...
 
 }
 ```
+
 ```
 <beans>
 
-	<!-- Exception translation bean post processor -->
-	<bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+    <!-- Exception translation bean post processor -->
+    <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
 
-	<bean id="myProductDao" class="product.ProductDaoImpl"/>
+    <bean id="myProductDao" class="product.ProductDaoImpl"/>
 
 </beans>
 ```
@@ -54,6 +57,7 @@ public class ProductDaoImpl implements ProductDao {
 上面的后置处理器`PersistenceExceptionTranslationPostProcessor`，会自动查找所有的异常转义器（实现`PersistenceExceptionTranslator`接口的Bean），并且拦截所有标记为`@Repository`注解的Bean，通过代理来拦截异常，然后通过`PersistenceExceptionTranslator`将DAO层异常转义后的异常抛出。
 
 总而言之：开发者可以既基于简单的持久化技术的API和注解来实现DAO，同时还受益于Spring管理的事务，依赖注入和透明异常转换（如果需要）到Spring的自定义异常层次结构。
+
 ## 16.3 Hibernate
 
 我们将首先介绍Spring环境中的[Hibernate 5](http://hibernate.org)，然后通过使用Hibernate 5来演示Spring集成O-R映射器的方法。本节将详细介绍许多问题，并显示DAO实现和事务划分的不同变体。这些模式中大多数可以直接转换为所有其他支持的ORM工具。本章中的以下部分将通过简单的例子来介绍其他ORM技术。
@@ -68,26 +72,26 @@ public class ProductDaoImpl implements ProductDao {
 
 ```
 <beans>
-	<bean id="myDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-		<property name="driverClassName" value="org.hsqldb.jdbcDriver"/>
-		<property name="url" value="jdbc:hsqldb:hsql://localhost:9001"/>
-		<property name="username" value="sa"/>
-		<property name="password" value=""/>
-	</bean>
+    <bean id="myDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="org.hsqldb.jdbcDriver"/>
+        <property name="url" value="jdbc:hsqldb:hsql://localhost:9001"/>
+        <property name="username" value="sa"/>
+        <property name="password" value=""/>
+    </bean>
 
-	<bean id="mySessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
-		<property name="dataSource" ref="myDataSource"/>
-		<property name="mappingResources">
-			<list>
-				<value>product.hbm.xml</value>
-			</list>
-		</property>
-		<property name="hibernateProperties">
-			<value>
-				hibernate.dialect=org.hibernate.dialect.HSQLDialect
-			</value>
-		</property>
-	</bean>
+    <bean id="mySessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <property name="dataSource" ref="myDataSource"/>
+        <property name="mappingResources">
+            <list>
+                <value>product.hbm.xml</value>
+            </list>
+        </property>
+        <property name="hibernateProperties">
+            <value>
+                hibernate.dialect=org.hibernate.dialect.HSQLDialect
+            </value>
+        </property>
+    </bean>
 </beans>
 ```
 
@@ -95,7 +99,7 @@ public class ProductDaoImpl implements ProductDao {
 
 ```
 <beans>
-	<jee:jndi-lookup id="myDataSource" jndi-name="java:comp/env/jdbc/myds"/>
+    <jee:jndi-lookup id="myDataSource" jndi-name="java:comp/env/jdbc/myds"/>
 </beans>
 ```
 
@@ -108,30 +112,30 @@ Hibernate有一个特性称之为上下文会话，在每个Hibernate本身每�
 ```
 public class ProductDaoImpl implements ProductDao {
 
-	private SessionFactory sessionFactory;
+    private SessionFactory sessionFactory;
 
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
-	}
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
-	public Collection loadProductsByCategory(String category) {
-		return this.sessionFactory.getCurrentSession()
-				.createQuery("from test.Product product where product.category=?")
-				.setParameter(0, category)
-				.list();
-	}
+    public Collection loadProductsByCategory(String category) {
+        return this.sessionFactory.getCurrentSession()
+                .createQuery("from test.Product product where product.category=?")
+                .setParameter(0, category)
+                .list();
+    }
 }
 ```
 
-除了需要在实例中持有`SessionFactory`引用以外，上面的代码风格跟Hibernate文档中的例子十分相近。Spring团队强烈建议使用这种基于实例变量的实现风格，而非守旧的`static HibernateUtil`风格(总的来说，除非*绝对*必要，否则尽量不要使用`static`变量来持有资源)。
+除了需要在实例中持有`SessionFactory`引用以外，上面的代码风格跟Hibernate文档中的例子十分相近。Spring团队强烈建议使用这种基于实例变量的实现风格，而非守旧的`static HibernateUtil`风格\(总的来说，除非_绝对_必要，否则尽量不要使用`static`变量来持有资源\)。
 
 上面DAO的实现完全符合Spring依赖注入的样式：这种方式可以很好的集成Spring IoC容器，就好像Spring的`HibernateTemplate`代码一样。当然，DAO层的实现也可以通过纯Java的方式来配置（比如在UT中）。简单实例化`ProductDaoImpl`并且调用`setSessionFactory(...)`即可。当然，也可以使用Spring bean来进行注入，参考如下XML配置：
 
 ```
 <beans>
-	<bean id="myProductDao" class="product.ProductDaoImpl">
-		<property name="sessionFactory" ref="mySessionFactory"/>
-	</bean>
+    <bean id="myProductDao" class="product.ProductDaoImpl">
+        <property name="sessionFactory" ref="mySessionFactory"/>
+    </bean>
 </beans>
 ```
 
@@ -154,22 +158,22 @@ Spring团队建议开发者使用Spring声明式的事务支持，这样可以�
 ```
 public class ProductServiceImpl implements ProductService {
 
-	private ProductDao productDao;
+    private ProductDao productDao;
 
-	public void setProductDao(ProductDao productDao) {
-		this.productDao = productDao;
-	}
+    public void setProductDao(ProductDao productDao) {
+        this.productDao = productDao;
+    }
 
-	@Transactional
-	public void increasePriceOfAllProductsInCategory(final String category) {
-		List productsToChange = this.productDao.loadProductsByCategory(category);
-		// ...
-	}
+    @Transactional
+    public void increasePriceOfAllProductsInCategory(final String category) {
+        List productsToChange = this.productDao.loadProductsByCategory(category);
+        // ...
+    }
 
-	@Transactional(readOnly = true)
-	public List<Product> findAllProducts() {
-		return this.productDao.findAllProducts();
-	}
+    @Transactional(readOnly = true)
+    public List<Product> findAllProducts() {
+        return this.productDao.findAllProducts();
+    }
 
 }
 ```
@@ -179,29 +183,29 @@ public class ProductServiceImpl implements ProductService {
 ```
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:aop="http://www.springframework.org/schema/aop"
-	xmlns:tx="http://www.springframework.org/schema/tx"
-	xsi:schemaLocation="
-		http://www.springframework.org/schema/beans
-		http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/tx
-		http://www.springframework.org/schema/tx/spring-tx.xsd
-		http://www.springframework.org/schema/aop
-		http://www.springframework.org/schema/aop/spring-aop.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
 
-	<!-- SessionFactory, DataSource, etc. omitted -->
+    <!-- SessionFactory, DataSource, etc. omitted -->
 
-	<bean id="transactionManager"
-			class="org.springframework.orm.hibernate5.HibernateTransactionManager">
-		<property name="sessionFactory" ref="sessionFactory"/>
-	</bean>
+    <bean id="transactionManager"
+            class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
 
-	<tx:annotation-driven/>
+    <tx:annotation-driven/>
 
-	<bean id="myProductService" class="product.SimpleProductService">
-		<property name="productDao" ref="myProductDao"/>
-	</bean>
+    <bean id="myProductService" class="product.SimpleProductService">
+        <property name="productDao" ref="myProductDao"/>
+    </bean>
 </beans>
 ```
 
@@ -211,45 +215,46 @@ public class ProductServiceImpl implements ProductService {
 
 ```
 <bean id="myTxManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
-		<property name="sessionFactory" ref="mySessionFactory"/>
-	</bean>
+        <property name="sessionFactory" ref="mySessionFactory"/>
+    </bean>
 
-	<bean id="myProductService" class="product.ProductServiceImpl">
-		<property name="transactionManager" ref="myTxManager"/>
-		<property name="productDao" ref="myProductDao"/>
-	</bean>
+    <bean id="myProductService" class="product.ProductServiceImpl">
+        <property name="transactionManager" ref="myTxManager"/>
+        <property name="productDao" ref="myProductDao"/>
+    </bean>
 </beans>
 ```
+
 ```
 public class ProductServiceImpl implements ProductService {
 
-	private TransactionTemplate transactionTemplate;
-	private ProductDao productDao;
+    private TransactionTemplate transactionTemplate;
+    private ProductDao productDao;
 
-	public void setTransactionManager(PlatformTransactionManager transactionManager) {
-		this.transactionTemplate = new TransactionTemplate(transactionManager);
-	}
+    public void setTransactionManager(PlatformTransactionManager transactionManager) {
+        this.transactionTemplate = new TransactionTemplate(transactionManager);
+    }
 
-	public void setProductDao(ProductDao productDao) {
-		this.productDao = productDao;
-	}
+    public void setProductDao(ProductDao productDao) {
+        this.productDao = productDao;
+    }
 
-	public void increasePriceOfAllProductsInCategory(final String category) {
-		this.transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-			public void doInTransactionWithoutResult(TransactionStatus status) {
-				List productsToChange = this.productDao.loadProductsByCategory(category);
-				// do the price increase...
-			}
-		});
-	}
+    public void increasePriceOfAllProductsInCategory(final String category) {
+        this.transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+            public void doInTransactionWithoutResult(TransactionStatus status) {
+                List productsToChange = this.productDao.loadProductsByCategory(category);
+                // do the price increase...
+            }
+        });
+    }
 }
 ```
 
-Spring的`TransactionInterceptor`允许任何检查的应用异常到`callback`代码中去，而`TransactionTemplate`还会非受检异常触发进行回调。`TransactionTemplate`则会因为非受检异常或者是由应用标记事务回滚(通过`TransactionStatus`)。`TransactionInterceptor`也是一样的处理逻辑，但是同时还允许基于方法配置回滚策略。
+Spring的`TransactionInterceptor`允许任何检查的应用异常到`callback`代码中去，而`TransactionTemplate`还会非受检异常触发进行回调。`TransactionTemplate`则会因为非受检异常或者是由应用标记事务回滚\(通过`TransactionStatus`\)。`TransactionInterceptor`也是一样的处理逻辑，但是同时还允许基于方法配置回滚策略。
 
 ### 16.3.5 事务管理策略
 
-无论是`TransactionTemplate`或者是`TransactionInterceptor`都将实际的事务处理代理到`PlatformTransactionManager`实例上来进行处理的，这个实例的实现可以是一个`HibernateTransactionManager`(包含一个Hibernate的`SessionFactory`通过使用`ThreadLocal`的`Session`)，也可以是`JatTransactionManager`(代理到容器的JTA子系统)。开发者甚至可以使用一个自定义的`PlatformTransactionManager`的实现。现在，如果应用有需求需要需要部署分布式事务的话，只是一个配置变化，就可以从本地Hibernate事务管理切换到JTA。简单地用Spring的JTA事务实现来替换Hibernate事务管理器即可。因为引用的`PlatformTransactionManager`的是通用事务管理API，事务管理器之间的切换是无需修改代码的。
+无论是`TransactionTemplate`或者是`TransactionInterceptor`都将实际的事务处理代理到`PlatformTransactionManager`实例上来进行处理的，这个实例的实现可以是一个`HibernateTransactionManager`\(包含一个Hibernate的`SessionFactory`通过使用`ThreadLocal`的`Session`\)，也可以是`JatTransactionManager`\(代理到容器的JTA子系统\)。开发者甚至可以使用一个自定义的`PlatformTransactionManager`的实现。现在，如果应用有需求需要需要部署分布式事务的话，只是一个配置变化，就可以从本地Hibernate事务管理切换到JTA。简单地用Spring的JTA事务实现来替换Hibernate事务管理器即可。因为引用的`PlatformTransactionManager`的是通用事务管理API，事务管理器之间的切换是无需修改代码的。
 
 对于那些跨越了多个Hibernate会话工厂的分布式事务，只需要将`JtaTransactionManager`和多个`LocalSessionFactoryBean`定义相结合即可。每个DAO之后会获取一个特定的`SessionFactory`引用。如果所有底层JDBC数据源都是事务性容器，那么只要使用`JtaTransactionManager`作为策略实现，业务服务就可以划分任意数量的DAO和任意数量的会话工厂的事务。
 
@@ -297,7 +302,7 @@ further JDBC access is allowed within this transaction.
 * Spring确定Hibernate与JTA事务同步，并且行为与前一种情况不同。假设Hibernate Session需要关闭，Spring将会关闭它。
 * JTA事务提交。
 * Hibernate与JTA事务同步，所以JTA事务管理器通过`afterCompletion`方法回调事务，可以正确清除其缓存。
-## 16.4 JPA
+  ## 16.4 JPA
 
 Spring JPA在`org.springframework.orm.jpa`包中已经可用，Spring JPA用了Hibernate集成相似的方法来提供更易于理解的JPA支持，与此同时，了解了JPA底层实现，可以理解更多的Spring JPA特性。
 
@@ -313,29 +318,29 @@ Spring JPA支持提供了三种配置JPA`EntityManagerFactory`的方法，之后
 
 ```
 <beans>
-	<bean id="myEmf" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
-		<property name="persistenceUnitName" value="myPersistenceUnit"/>
-	</bean>
+    <bean id="myEmf" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
+        <property name="persistenceUnitName" value="myPersistenceUnit"/>
+    </bean>
 </beans>
 ```
 
-这种形式的JPA部署是最简单的，同时限制也很多。开发者不能引用现有的JDBC`DataSource` bean定义，并且不支持全局事务。而且，持久化类的织入(weaving)(字节码转换)是特定于提供者的，通常需要在启动时指定特定的JVM代理。该选项仅适用于符合JPA Spec的独立应用程序或测试环境。
+这种形式的JPA部署是最简单的，同时限制也很多。开发者不能引用现有的JDBC`DataSource` bean定义，并且不支持全局事务。而且，持久化类的织入\(weaving\)\(字节码转换\)是特定于提供者的，通常需要在启动时指定特定的JVM代理。该选项仅适用于符合JPA Spec的独立应用程序或测试环境。
 
 #### 从JNDI中获取EntityManagerFactory
 
 > 在部署到J2EE服务器时可以使用此选项。检查服务器的文档来了解如何将自定义JPA提供程序部署到服务器中，从而对服务器进行比默认更多的个性化定制。
 
-从JNDI获取`EntityManagerFactory`(例如在Java EE环境中)，只需要在XML配置中加入配置信息即可：
+从JNDI获取`EntityManagerFactory`\(例如在Java EE环境中\)，只需要在XML配置中加入配置信息即可：
 
 ```
 <beans>
-	<jee:jndi-lookup id="myEmf" jndi-name="persistence/myPersistenceUnit"/>
+    <jee:jndi-lookup id="myEmf" jndi-name="persistence/myPersistenceUnit"/>
 </beans>
 ```
 
 此操作将采用标准J2EE引导：J2EE服务器自动检测J2EE部署描述符（例如web.xml）中persistence-unit-ref条目和持久性单元（实际上是应用程序jar中的META-INF/persistence.xml文件），并为这些持久性单元定义环境上下文位置。
 
-在这种情况下，整个持久化单元部署（包括持久化类的织入(weaving)（字节码转换））都取决于J2EE服务器。JDBC `DataSource`通过META-INF/persistence.xml文件中的JNDI位置进行定义; 而`EntityManager`事务与服务器JTA子系统集成。 Spring仅使用获取的`EntityManagerFactory`，通过依赖注入将其传递给应用程序对象，通常通过`JtaTransactionManager`来管理持久性单元的事务。
+在这种情况下，整个持久化单元部署（包括持久化类的织入\(weaving\)（字节码转换））都取决于J2EE服务器。JDBC `DataSource`通过META-INF/persistence.xml文件中的JNDI位置进行定义; 而`EntityManager`事务与服务器JTA子系统集成。 Spring仅使用获取的`EntityManagerFactory`，通过依赖注入将其传递给应用程序对象，通常通过`JtaTransactionManager`来管理持久性单元的事务。
 
 如果在同一应用程序中使用多个持久性单元，则这种JNDI检索的持久性单元的bean名称应与应用程序用于引用它们的持久性单元名称相匹配，例如`@PersistenceUnit`和`@PersistenceContext`注释。
 
@@ -343,37 +348,38 @@ Spring JPA支持提供了三种配置JPA`EntityManagerFactory`的方法，之后
 
 > 在基于Spring的应用程序环境中使用此选项来实现完整的JPA功能。这包括诸如Tomcat的Web容器，以及具有复杂持久性要求的独立应用程序和集成测试。
 
-`LocalContainerEntityManagerFactoryBean`可以完全控制`EntityManagerFactory`的配置，同时适用于需要细粒度定制的环境。 `LocalContainerEntityManagerFactoryBean`会基于`persistence.xml`文件，`dataSourceLookup`策略和指定的`loadTimeWeaver`来创建一个`PersistenceUnitInfo`实例。因此，可以在JNDI之外使用自定义数据源并控制织入(weaving)过程。以下示例显示`LocalContainerEntityManagerFactoryBean`的典型Bean定义：
+`LocalContainerEntityManagerFactoryBean`可以完全控制`EntityManagerFactory`的配置，同时适用于需要细粒度定制的环境。 `LocalContainerEntityManagerFactoryBean`会基于`persistence.xml`文件，`dataSourceLookup`策略和指定的`loadTimeWeaver`来创建一个`PersistenceUnitInfo`实例。因此，可以在JNDI之外使用自定义数据源并控制织入\(weaving\)过程。以下示例显示`LocalContainerEntityManagerFactoryBean`的典型Bean定义：
 
 ```
 <beans>
-	<bean id="myEmf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-		<property name="dataSource" ref="someDataSource"/>
-		<property name="loadTimeWeaver">
-			<bean class="org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver"/>
-		</property>
-	</bean>
+    <bean id="myEmf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="someDataSource"/>
+        <property name="loadTimeWeaver">
+            <bean class="org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver"/>
+        </property>
+    </bean>
 </beans>
 ```
+
 下面的例子是一个典型的persistence.xml文件：
 
 ```
 <persistence xmlns="http://java.sun.com/xml/ns/persistence" version="1.0">
-	<persistence-unit name="myUnit" transaction-type="RESOURCE_LOCAL">
-		<mapping-file>META-INF/orm.xml</mapping-file>
-		<exclude-unlisted-classes/>
-	</persistence-unit>
+    <persistence-unit name="myUnit" transaction-type="RESOURCE_LOCAL">
+        <mapping-file>META-INF/orm.xml</mapping-file>
+        <exclude-unlisted-classes/>
+    </persistence-unit>
 </persistence>
 ```
 
 > `<exclude-unlisted-classes />`标签表示不会进行注解实体类的扫描。指定的显式`true`值 -  `<exclude-unlisted-classes>true</exclude-unlisted-classes/>`- 也意味着不进行扫描。`<exclude-unlisted-classes> false</exclude-unlisted-classes>`则会触发扫描;但是，如果开发者需要进行实体类扫描，建议开发者简单地省略`<exclude-unlisted-classes>`元素。
 
-`LocalContainerEntityManagerFactoryBean`是最强大的JPA设置选项，允许在应用程序中进行灵活的本地配置。它支持连接到现有的JDBC`DataSource`，支持本地和全局事务等。但是，它对运行时环境施加了需求，其中之一就是如果持久性提供程序需要字节码转换，就需要有织入(weaving)能力的类加载器。
+`LocalContainerEntityManagerFactoryBean`是最强大的JPA设置选项，允许在应用程序中进行灵活的本地配置。它支持连接到现有的JDBC`DataSource`，支持本地和全局事务等。但是，它对运行时环境施加了需求，其中之一就是如果持久性提供程序需要字节码转换，就需要有织入\(weaving\)能力的类加载器。
 
 此选项可能与J2EE服务器的内置JPA功能冲突。在完整的J2EE环境中，请考虑从JNDI获取`EntityManagerFactory`。或者，在开发者的`LocalContainerEntityManagerFactoryBean`定义中指定一个自定义`persistenceXmlLocation`，例如META-INF/my-persistence.xml，并且只在应用程序jar文件中包含有该名称的描述符。因为J2EE服务器仅查找默认的META-INF/persistence.xml文件，所以它会忽略这种自定义持久性单元，从而避免了与Spring驱动的JPA设置之间发生冲突。 （例如，这适用于Resin 3.1）
 
-> 何时需要加载时间织入？
-并非所有JPA提供商都需要JVM代理。Hibernate就是一个不需要JVM代理的例子。如果开发者的提供商不需要代理或开发者有其他替代方案，例如通过定制编译器或`Ant`任务在构建时应用增强功能，则不用使用加载时间编织器。
+> 何时需要加载时间织入？  
+> 并非所有JPA提供商都需要JVM代理。Hibernate就是一个不需要JVM代理的例子。如果开发者的提供商不需要代理或开发者有其他替代方案，例如通过定制编译器或`Ant`任务在构建时应用增强功能，则不用使用加载时间编织器。
 
 `LoadTimeWeaver`是一个Spring提供的接口，它允许以特定方式插入JPA`ClassTransformer`实例，这取决于环境是Web容器还是应用程序服务器。 通过代理挂载`ClassTransformers`通常性能较差。[代理](https://docs.oracle.com/javase/6/docs/api/java/lang/instrument/package-summary.html)会对整个虚拟机进行操作，并检查加载的每个类，这是生产服务器环境中最不需要的额外负载。
 
@@ -386,7 +392,7 @@ Spring为各种环境提供了一些`LoadTimeWeaver`实现，允许`ClassTransfo
 ```
 <context:load-time-weaver/>
 <bean id="emf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-	...
+    ...
 </bean>
 ```
 
@@ -394,13 +400,13 @@ Spring为各种环境提供了一些`LoadTimeWeaver`实现，允许`ClassTransfo
 
 ```
 <bean id="emf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-	<property name="loadTimeWeaver">
-		<bean class="org.springframework.instrument.classloading.ReflectiveLoadTimeWeaver"/>
-	</property>
+    <property name="loadTimeWeaver">
+        <bean class="org.springframework.instrument.classloading.ReflectiveLoadTimeWeaver"/>
+    </property>
 </bean>
 ```
-无论LTW如何配置，使用这种技术，依赖于仪器的JPA应用程序都可以在目标平台（例如：Tomcat）中运行，而不需要代理。这尤其重要的是当主机应用程序依赖于不同的JPA实现时，因为JPA转换器仅应用于类加载器级，彼此隔离。
 
+无论LTW如何配置，使用这种技术，依赖于仪器的JPA应用程序都可以在目标平台（例如：Tomcat）中运行，而不需要代理。这尤其重要的是当主机应用程序依赖于不同的JPA实现时，因为JPA转换器仅应用于类加载器级，彼此隔离。
 
 #### 处理多个持久化单元
 
@@ -408,60 +414,60 @@ Spring为各种环境提供了一些`LoadTimeWeaver`实现，允许`ClassTransfo
 
 ```
 <bean id="pum" class="org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager">
-	<property name="persistenceXmlLocations">
-		<list>
-			<value>org/springframework/orm/jpa/domain/persistence-multi.xml</value>
-			<value>classpath:/my/package/**/custom-persistence.xml</value>
-			<value>classpath*:META-INF/persistence.xml</value>
-		</list>
-	</property>
-	<property name="dataSources">
-		<map>
-			<entry key="localDataSource" value-ref="local-db"/>
-			<entry key="remoteDataSource" value-ref="remote-db"/>
-		</map>
-	</property>
-	<!-- if no datasource is specified, use this one -->
-	<property name="defaultDataSource" ref="remoteDataSource"/>
+    <property name="persistenceXmlLocations">
+        <list>
+            <value>org/springframework/orm/jpa/domain/persistence-multi.xml</value>
+            <value>classpath:/my/package/**/custom-persistence.xml</value>
+            <value>classpath*:META-INF/persistence.xml</value>
+        </list>
+    </property>
+    <property name="dataSources">
+        <map>
+            <entry key="localDataSource" value-ref="local-db"/>
+            <entry key="remoteDataSource" value-ref="remote-db"/>
+        </map>
+    </property>
+    <!-- if no datasource is specified, use this one -->
+    <property name="defaultDataSource" ref="remoteDataSource"/>
 </bean>
 
 <bean id="emf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-	<property name="persistenceUnitManager" ref="pum"/>
-	<property name="persistenceUnitName" value="myCustomUnit"/>
+    <property name="persistenceUnitManager" ref="pum"/>
+    <property name="persistenceUnitName" value="myCustomUnit"/>
 </bean>
 ```
 
-在默认实现传递给JPA provider之前，是允许通过属性（影响全部持久化单元）或者通过`PersistenceUnitPostProcessor`以编程(对选择的持久化单元进行)进行对`PersistenceUnitInfo`进行自定义的。如果没有指定`PersistenceUnitManager`，则由`LocalContainerEntityManagerFactoryBean`在内部创建和使用。
+在默认实现传递给JPA provider之前，是允许通过属性（影响全部持久化单元）或者通过`PersistenceUnitPostProcessor`以编程\(对选择的持久化单元进行\)进行对`PersistenceUnitInfo`进行自定义的。如果没有指定`PersistenceUnitManager`，则由`LocalContainerEntityManagerFactoryBean`在内部创建和使用。
 
 ### 16.4.2 基于JPA的EntityManagerFactory和EntityManager来实现DAO
 
-> 虽然`EntityManagerFactory`实例是线程安全的，但`EntityManager`实例不是。注入的JPA `EntityManager`的行为类似于从JPA Spec中定义的应用程序服务器的JNDI环境中提取的`EntityManager`。它将所有调用委托给当前事务的`EntityManager`(如果有);否则，它每个操作返回的都是新创建的`EntityManager`，通过使用不同的`EntityManager`来保证使用时的线程安全。
+> 虽然`EntityManagerFactory`实例是线程安全的，但`EntityManager`实例不是。注入的JPA `EntityManager`的行为类似于从JPA Spec中定义的应用程序服务器的JNDI环境中提取的`EntityManager`。它将所有调用委托给当前事务的`EntityManager`\(如果有\);否则，它每个操作返回的都是新创建的`EntityManager`，通过使用不同的`EntityManager`来保证使用时的线程安全。
 
 通过注入的方式使用`EntityManagerFactory`或`EntityManager`来编写JPA代码，是不需要依赖任何Spring定义的类的。如果启用了`PersistenceAnnotationBeanPostProcessor`，Spring可以在实例级别和方法级别识别`@PersistenceUnit`和`@PersistenceContext`注解。使用`@PersistenceUnit`注解的纯JPA DAO实现可能如下所示：
 
 ```
 public class ProductDaoImpl implements ProductDao {
 
-	private EntityManagerFactory emf;
+    private EntityManagerFactory emf;
 
-	@PersistenceUnit
-	public void setEntityManagerFactory(EntityManagerFactory emf) {
-		this.emf = emf;
-	}
+    @PersistenceUnit
+    public void setEntityManagerFactory(EntityManagerFactory emf) {
+        this.emf = emf;
+    }
 
-	public Collection loadProductsByCategory(String category) {
-		EntityManager em = this.emf.createEntityManager();
-		try {
-			Query query = em.createQuery("from Product as p where p.category = ?1");
-			query.setParameter(1, category);
-			return query.getResultList();
-		}
-		finally {
-			if (em != null) {
-				em.close();
-			}
-		}
-	}
+    public Collection loadProductsByCategory(String category) {
+        EntityManager em = this.emf.createEntityManager();
+        try {
+            Query query = em.createQuery("from Product as p where p.category = ?1");
+            query.setParameter(1, category);
+            return query.getResultList();
+        }
+        finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
 }
 ```
 
@@ -470,10 +476,10 @@ public class ProductDaoImpl implements ProductDao {
 ```
 <beans>
 
-	<!-- bean post-processor for JPA annotations -->
-	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/>
+    <!-- bean post-processor for JPA annotations -->
+    <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/>
 
-	<bean id="myProductDao" class="product.ProductDaoImpl"/>
+    <bean id="myProductDao" class="product.ProductDaoImpl"/>
 </beans>
 ```
 
@@ -481,35 +487,35 @@ public class ProductDaoImpl implements ProductDao {
 
 ```
 <beans>
-	<!-- post-processors for all standard config annotations -->
-	<context:annotation-config/>
+    <!-- post-processors for all standard config annotations -->
+    <context:annotation-config/>
 
-	<bean id="myProductDao" class="product.ProductDaoImpl"/>
+    <bean id="myProductDao" class="product.ProductDaoImpl"/>
 </beans>
 ```
 
-这样的DAO的主要问题是它总是通过工厂创建一个新的`EntityManager`。开发者可以通过请求事务性`EntityManager`（也称为*共享EntityManager*，因为它是实际的事务性EntityManager的一个共享的，线程安全的代理）来避免这种情况。
+这样的DAO的主要问题是它总是通过工厂创建一个新的`EntityManager`。开发者可以通过请求事务性`EntityManager`（也称为_共享EntityManager_，因为它是实际的事务性EntityManager的一个共享的，线程安全的代理）来避免这种情况。
 
 ```
 public class ProductDaoImpl implements ProductDao {
 
-	@PersistenceContext
-	private EntityManager em;
+    @PersistenceContext
+    private EntityManager em;
 
-	public Collection loadProductsByCategory(String category) {
-		Query query = em.createQuery("from Product as p where p.category = :category");
-		query.setParameter("category", category);
-		return query.getResultList();
-	}
+    public Collection loadProductsByCategory(String category) {
+        Query query = em.createQuery("from Product as p where p.category = :category");
+        query.setParameter("category", category);
+        return query.getResultList();
+    }
 }
 ```
 
-`@PersistenceContext`注解具有可选的属性类型，默认值为`PersistenceContextType.TRANSACTION`。此默认值是开发者所需要接收共享的`EntityManager`代理。替代方案`PersistenceContextType.EXTENDED`则完全不同：该方案会返回一个所谓扩展的`EntityManager`，该`EntityManager`不是*线程安全*的，因此不能在并发访问的组件（如Spring管理的单例Bean）中使用。扩展实体管理器仅应用于状态组件中，比如持有会话的组件，其中`EntityManager`的生命周期与当前事务无关，而是完全取决于应用程序。
+`@PersistenceContext`注解具有可选的属性类型，默认值为`PersistenceContextType.TRANSACTION`。此默认值是开发者所需要接收共享的`EntityManager`代理。替代方案`PersistenceContextType.EXTENDED`则完全不同：该方案会返回一个所谓扩展的`EntityManager`，该`EntityManager`不是_线程安全_的，因此不能在并发访问的组件（如Spring管理的单例Bean）中使用。扩展实体管理器仅应用于状态组件中，比如持有会话的组件，其中`EntityManager`的生命周期与当前事务无关，而是完全取决于应用程序。
 
-> 方法和实例变量级别注入
-指示依赖注入（例如`@PersistenceUnit`和`@PersistenceContext`）的注解可以应用于类中的实例变量或方法，也就是表达式方法级注入和实例变量级注入。实例变量级注释简洁易用，而方法级别允许进一步处理注入的依赖关系。在这两种情况下，成员的可见性（`public`，`protected`，`private`）并不重要。
-类级注解怎么办？
-在J2EE平台上，它们用于依赖关系声明，而不是资源注入。
+> 方法和实例变量级别注入  
+> 指示依赖注入（例如`@PersistenceUnit`和`@PersistenceContext`）的注解可以应用于类中的实例变量或方法，也就是表达式方法级注入和实例变量级注入。实例变量级注释简洁易用，而方法级别允许进一步处理注入的依赖关系。在这两种情况下，成员的可见性（`public`，`protected`，`private`）并不重要。  
+> 类级注解怎么办？  
+> 在J2EE平台上，它们用于依赖关系声明，而不是资源注入。
 
 注入的`EntityManager`是由Spring管理的（Spring可以意识到正在进行的事务）。重要的是要注意，因为通过注解进行注入，即使新的DAO实现使用通过方法注入的`EntityManager`而不是`EntityManagerFactory`的注入的，在应用程序上下文XML中不需要进行任何修改。
 
@@ -545,3 +551,6 @@ Spring JPA还允许配置`JpaTransactionManager`将JPA事务暴露给访问同�
 * 需要为JTA配置JPA`EntityManagerFactory`。这是特定于提供程序的，通常通过在`LocalContainerEntityManagerFactoryBean`的特殊属性指定为"jpaProperties"。在使用Hibernate的情况下，这些属性甚至是需要基于特定的版本的;请查阅Hibernate文档以获取详细信息。
 * Spring的`HibernateJpaVendorAdapter`会强制执行某些面向Spring的默认设置，例如在Hibernate 5.0中匹配Hibernate自己的默认值的连接释放模式“on-close”，但在5.1 / 5.2中不再存在。对于JTA设置，不要声明`HibernateJpaVendorAdapter`开始，或关闭其`prepareConnection`标志。或者，将Hibernate 5.2的`hibernate.connection.handling_mode`属性设置为`DELAYED_ACQUISITION_AND_RELEASE_AFTER_STATEMENT`以恢复Hibernate自己的默认值。有关WebLogic的相关说明，请参考[Hibernate的虚假应用服务器警告]()一节。
 * 或者，可以考虑从应用程序服务器本身获取`EntityManagerFactory`，即通过JNDI查找而不是本地声明的`LocalContainerEntityManagerFactoryBean`。服务器提供的`EntityManagerFactory`可能需要在服务器配置中进行特殊定义，减少了部署的移植性，但是`EntityManagerFactory`将为开箱即用的服务器JTA环境设置。
+
+
+
