@@ -40,7 +40,11 @@
   * [6.5 语言参考](/6/6-5.md)
   * [6.6 本章节例子中使用的类](/6/6-6.md)
 * [14. DAO支持](14-dao-support.md)
-* [16. ORM和数据访问](/16-orm.md)
+* [16. ORM和数据访问](/16/16.md)
+  * [16.1 介绍一下Spring中的ORM    ](/16/16-1.md)
+  * [16.2 集成ORM的注意事项    ](/16/16-2.md)
+  * [16.3 Hibernate    ](/16/16-3.md)
+  * [16.4 JPA](/16/16-4.md)
 * [19. 视图技术](19-view-technologies.md)
 * [20. CORS支持](20-cors-support.md)
 * [21. 与其他Web框架集成 ](21-integrating-with-other-web-frameworks.md)
