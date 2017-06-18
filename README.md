@@ -1,8 +1,8 @@
 # Spring Framework 5 中文文档
 
-本项目为[Spring 5 Reference](http://docs.spring.io/spring/docs/5.0.0.BUILD-SNAPSHOT/spring-framework-reference/htmlsingle/)的翻译作品，由并[发编程网](http://ifeve.com/)的同学一起合作而成.
+本项目为[Spring 5 Reference](http://docs.spring.io/spring/docs/5.0.0.BUILD-SNAPSHOT/spring-framework-reference/htmlsingle/)的翻译作品，由并[发编程网](http://ifeve.com/)的同学一起合作而成。
 
-
+[**Git Book 在线阅读地址**](https://lfvepclr.gitbooks.io/spring-framework-5-doc-cn/content/)
 
 ## 待整理列表：
 
@@ -15,8 +15,6 @@
 * [35. Spring注解编程模型](http://ifeve.com/annotation-programming-model/)
 
 * [37. Spring AOP的经典用法](http://ifeve.com/classic-aop-spring/)
-
-
 
 ## Contributors
 
