@@ -57,7 +57,7 @@
 * [20. CORS支持](20-cors-support.md)
 * [21. 与其他Web框架集成 ](21-integrating-with-other-web-frameworks.md)
 * [24. 使用Spring提供远程和WEB服务](/24/24.md)
-  * [24.1 介绍    ](/24/24-1.md)
+  * [24.1 介绍](/24/24-1.md)
   * 24.2 使用RMI暴露服务
   * 24.3 使用Hessian通过HTTP远程调用服务
   * 24.4 使用HTTP调用器暴露服务
