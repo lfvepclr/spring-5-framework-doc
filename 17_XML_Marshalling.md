@@ -341,7 +341,7 @@ XstreamMarshaller 类不需进行任何配置便可直接在 applicationContext.
 </beans>
 ```
 
-Xstream 默认允许对任何类进行反编组操作，但这可能会导致安全隐患。因此不建议使用 XStreamMarshaller 对来源于外部（比如公网）的 XML 文档进行反编组。如果你坚持使用 XStreamMarshaller 反编组来自外部的 XML 文档，请如下例演示的一样设置 supportedClasses 属性：
+![](http://docs.spring.io/spring/docs/5.0.0.BUILD-SNAPSHOT/spring-framework-reference/htmlsingle/images/warning.png.pagespeed.ce.aG27Rp2bJY.png) Xstream 默认允许对任何类进行反编组操作，但这可能会导致安全隐患。因此不建议使用 XStreamMarshaller 对来源于外部（比如公网）的 XML 文档进行反编组。如果你坚持使用 XStreamMarshaller 反编组来自外部的 XML 文档，请如下例演示的一样设置 supportedClasses 属性：
 ```
 <bean id="xstreamMarshaller" class="org.springframework.oxm.xstream.XStreamMarshaller">
 	<property name="supportedClasses" value="org.springframework.oxm.xstream.Flight"/>
@@ -353,4 +353,4 @@ Xstream 默认允许对任何类进行反编组操作，但这可能会导致安
 
 更进一步，你可以通过注册 [自定义转换器](http://docs.spring.io/spring-framework/docs/5.0.0.BUILD-SNAPSHOT/javadoc-api/org/springframework/oxm/xstream/XStreamMarshaller.html#setConverters(com.thoughtworks.xstream.converters.ConverterMatcher%E2%80%A6%E2%80%8B)) 来确保只有你指定的类才能够被反编组。建议在明确指定了所有转换器后，在列表的最后加上 CatchAllConverter ，这样一来便可确保具有低优先级以及安全风险的 Xstream 默认转换器不会被调用。
 
-这里需要注意的是 XStream 是一个 XML 序列化类库，而非一个数据绑定类库，所以它对命名空间的支持有限。这就使得 XStream 并不适合于用在网络服务中。
+![](http://docs.spring.io/spring/docs/5.0.0.BUILD-SNAPSHOT/spring-framework-reference/htmlsingle/images/note.png.pagespeed.ce.9zQ_1wVwzR.png) 这里需要注意的是 XStream 是一个 XML 序列化类库，而非一个数据绑定类库，所以它对命名空间的支持有限。这就使得 XStream 并不适合于用在网络服务中。
