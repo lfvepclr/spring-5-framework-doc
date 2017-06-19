@@ -1,4 +1,5 @@
 #17. 使用 O/X(Object/XML)映射器对XML进行编组
+
 ##17.1 简介
 本章将讨论Spring对于 对象/XML 映射的支持。对象/XML 映射，或 O/X 映射，是指将 XML 文档与 XML 文档对象进行互相转换的操作。这一转换操作也被称作 XML 编组，或 XML 序列化。在本章中，这几个概念都指的是同一个东西。
 在 O/X 映射中，将一组对象序列化为 XML 的操作是由一个编组器负责的。与之相对，一个反编组器则被用于将 XML 反序列化为一组对象。而这些操作中的 XML 文件来源可能是一份 DOM 文档，一个输入/输出流，或一个 SAX 管理器。
@@ -20,8 +21,11 @@ Spring 对来自底层 O/X 映射工具的异常进行了转换，以 XmlMapping
 Spring 将所有编组操作抽象成了 org.springframework.oxm.Marshaller 中的方法，以下是该接口最主要的一个方法：
 ```
 public interface Marshaller {
-  /**	 * 将对象编组并存放在 Result 中.
- 	 */	void marshal(Object graph, Result result) throws XmlMappingException, IOException;}
+  /**
+	 * 将对象编组并存放在 Result 中.
+ 	 */
+	void marshal(Object graph, Result result) throws XmlMappingException, IOException;
+}
 ```
 
 Marshaller 接口有一个主方法用于将一个给定对象编组为一个给定的 javax.xml.transform.Result 实现。这里的 Result 是一个用于代表某种 XML 输出格式的标记接口：不同的 Result 实现会封装不同的 XML 表现形式，详见下表：
@@ -38,9 +42,11 @@ Marshaller 接口有一个主方法用于将一个给定对象编组为一个给
 与 Marshaller 接口相对应，还有一个 org.springframework.oxm.Unmarshaller 接口。
 ```
 public interface Unmarshaller {
-   /**	 *  将来源 XML 反编组成一个对象
+   /**
+	 *  将来源 XML 反编组成一个对象
 	 */
-     	Object unmarshal(Source source) throws XmlMappingException, IOException;}
+     	Object unmarshal(Source source) throws XmlMappingException, IOException;
+}
 ```
 此接口同样也有一个方法，从 javax.xml.transform.Source （一个抽象的 XML 输入）读取 XML 数据，并返回一个相对应的 Java 对象。和 Result 接口一样，Source 是一个拥有三个具体实现的标记接口。每一个实现封装了一种 XML 表现形式。详见下表：
 
@@ -65,39 +71,95 @@ Spring 的 OXM 可被用于十分广泛的场景。在以下的例子中，我�
 ```
 public class Settings {
 private boolean fooEnabled;
-public boolean isFooEnabled() {		return fooEnabled;	}
-public void setFooEnabled(boolean fooEnabled) {		this.fooEnabled = fooEnabled;	}}
+public boolean isFooEnabled() {
+		return fooEnabled;
+	}
+public void setFooEnabled(boolean fooEnabled) {
+		this.fooEnabled = fooEnabled;
+	}
+}
 ```
 
 应用程序的主类使用这个 bean 来存放应用的配置信息。除了主要方法外，主类还包含下面两个方法：saveSettings() 将配置 bean 保存成一个名为 settings.xml 的文件， loadSettings() 则将配置信息从 XML 文件中读取出来。另有一个 main() 方法负责构建 Spring 应用上下文，并调用前述两个方法。
 ```
-import java.io.FileInputStream;import java.io.FileOutputStream;import java.io.IOException;import javax.xml.transform.stream.StreamResult;import javax.xml.transform.stream.StreamSource;
-import org.springframework.context.ApplicationContext;import org.springframework.context.support.ClassPathXmlApplicationContext;import org.springframework.oxm.Marshaller;import org.springframework.oxm.Unmarshaller;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.oxm.Marshaller;
+import org.springframework.oxm.Unmarshaller;
 public class Application {
-private static final String FILE_NAME = "settings.xml";	private Settings settings = new Settings();	private Marshaller marshaller;	private Unmarshaller unmarshaller;
-public void setMarshaller(Marshaller marshaller) {		this.marshaller = marshaller;	}
-public void setUnmarshaller(Unmarshaller unmarshaller) {		this.unmarshaller = unmarshaller;	}
-public void saveSettings() throws IOException {		FileOutputStream os = null;		try {			os = new FileOutputStream(FILE_NAME);			this.marshaller.marshal(settings, new StreamResult(os));		} finally {			if (os != null) {				os.close();			}		}	}
-public void loadSettings() throws IOException {		FileInputStream is = null;		try {			is = new FileInputStream(FILE_NAME);			this.settings = (Settings) this.unmarshaller.unmarshal(new StreamSource(is));		} finally {			if (is != null) {				is.close();			}		}	}
-public static void main(String[] args) throws IOException {		ApplicationContext appContext =				new ClassPathXmlApplicationContext("applicationContext.xml");		Application application = (Application) appContext.getBean("application");		application.saveSettings();		application.loadSettings();	}}
+private static final String FILE_NAME = "settings.xml";
+	private Settings settings = new Settings();
+	private Marshaller marshaller;
+	private Unmarshaller unmarshaller;
+public void setMarshaller(Marshaller marshaller) {
+		this.marshaller = marshaller;
+	}
+public void setUnmarshaller(Unmarshaller unmarshaller) {
+		this.unmarshaller = unmarshaller;
+	}
+public void saveSettings() throws IOException {
+		FileOutputStream os = null;
+		try {
+			os = new FileOutputStream(FILE_NAME);
+			this.marshaller.marshal(settings, new StreamResult(os));
+		} finally {
+			if (os != null) {
+				os.close();
+			}
+		}
+	}
+public void loadSettings() throws IOException {
+		FileInputStream is = null;
+		try {
+			is = new FileInputStream(FILE_NAME);
+			this.settings = (Settings) this.unmarshaller.unmarshal(new StreamSource(is));
+		} finally {
+			if (is != null) {
+				is.close();
+			}
+		}
+	}
+public static void main(String[] args) throws IOException {
+		ApplicationContext appContext =
+				new ClassPathXmlApplicationContext("applicationContext.xml");
+		Application application = (Application) appContext.getBean("application");
+		application.saveSettings();
+		application.loadSettings();
+	}
+}
 ```
 
 需要将 marshaller 和 unmarshaller 这两个属性赋值才能使 Application 正确运行。我们可以使用以下 applicationContext.xml 的内容来实现这一目的：
 ```
-<beans>	<bean id="application" class="Application">		<property name="marshaller" ref="castorMarshaller" />		<property name="unmarshaller" ref="castorMarshaller" />	</bean>	<bean id="castorMarshaller" class="org.springframework.oxm.castor.CastorMarshaller"/></beans>
+<beans>
+	<bean id="application" class="Application">
+		<property name="marshaller" ref="castorMarshaller" />
+		<property name="unmarshaller" ref="castorMarshaller" />
+	</bean>
+	<bean id="castorMarshaller" class="org.springframework.oxm.castor.CastorMarshaller"/>
+</beans>
 ```
 
 该应用中使用了 Castor 这一编组器实例，但我们可以使用在本章稍后描述的任何一个编组器实例来替换 Castor。Castor 默认并不需要任何进一步的配置，所以 bean 定义十分简洁。另外由于 CastorMarshaller 同时实现了 Marshaller 与 Unmarshaller 接口，所以我们可以同时把 castorMarshaller bean 赋值给应用的 marshaller 与 unmarshaller 属性。
 
 此范例应用将会产生如下 settings.xml 文件：
 ```
-<?xml version="1.0" encoding="UTF-8"?><settings foo-enabled="false"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<settings foo-enabled="false"/>
 ```
 
 ##17.4 基于 XML 架构的配置
 可以使用来自 OXM 命名空间的 XML 标签是对编组器的配置变得更简洁。要使用这些标签，请在 XML 文件开头引用恰当的 XML 架构。以下是一个引用 oxm 的示例，请注意粗体字部分：
 ```
-<?xml version="1.0" encoding="UTF-8"?><beans xmlns="http://www.springframework.org/schema/beans"	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"	xmlns:oxm="http://www.springframework.org/schema/oxm" 
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:oxm="http://www.springframework.org/schema/oxm" 
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
 	http://www.springframework.org/schema/beans/spring-beans.xsd 
 	http://www.springframework.org/schema/oxm 
@@ -122,7 +184,16 @@ Spring 支持基于 17.2 Marshaller 和 Unmarshaller 所提到的 Marshaller 和
 ###17.5.1 Jaxb2Marshaller
 Jaxb2Marshaller 类同时实现了 Marshaller 和 Unmarshaller 接口。这个类需要上下文路径以正常运作，你可以通过 contextPath 属性来设置。上下文路径是一组由冒号（：）分隔的 Java 包名。这些包下面包含了由 XML 架构所生成的对应 Java 类。另外你可以通过设置一个叫 classesToBeBound 的属性来配置一组可以被编组器支持的类。架构的验证则通过向 bean 中配置一到多个 XML 架构的 xsd 文件资源来实现。下面是一个 bean 的配置示例：
 ```
-<beans>	<bean id="jaxb2Marshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">		<property name="classesToBeBound">			<list>				<value>org.springframework.oxm.jaxb.Flight</value>				<value>org.springframework.oxm.jaxb.Flights</value>			</list>		</property>		<property name="schema" value="classpath:org/springframework/oxm/schema.xsd"/>	</bean>
+<beans>
+	<bean id="jaxb2Marshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+		<property name="classesToBeBound">
+			<list>
+				<value>org.springframework.oxm.jaxb.Flight</value>
+				<value>org.springframework.oxm.jaxb.Flights</value>
+			</list>
+		</property>
+		<property name="schema" value="classpath:org/springframework/oxm/schema.xsd"/>
+	</bean>
 ...
 </beans>
 ```
@@ -135,7 +206,11 @@ Jaxb2-marshaller 标签 配置了一个 org.springframework.oxm.jaxb.Jaxb2Marsha
 
 如果要配置需要被绑定的类，则可以使用 class-to-be-bound 子标签：
 ```
-<oxm:jaxb2-marshaller id="marshaller">	<oxm:class-to-be-bound name="org.springframework.ws.samples.airline.schema.Airport"/>	<oxm:class-to-be-bound name="org.springframework.ws.samples.airline.schema.Flight"/>	...</oxm:jaxb2-marshaller>
+<oxm:jaxb2-marshaller id="marshaller">
+	<oxm:class-to-be-bound name="org.springframework.ws.samples.airline.schema.Airport"/>
+	<oxm:class-to-be-bound name="org.springframework.ws.samples.airline.schema.Flight"/>
+	...
+</oxm:jaxb2-marshaller>
 ```
 
 可用的标签属性如下表：
@@ -153,7 +228,10 @@ Castor XML 映射是一个开源的 XML 绑定框架。它允许使用者将包�
 ###17.6.1 CastorMarshaller
 与 JAXB 类似，CastorMarshaller 类同时实现了 Marshaller 和 Unmarshaller 接口。它可以通过以下配置来被引用：
 ```
-<beans>	<bean id="castorMarshaller" class="org.springframework.oxm.castor.CastorMarshaller" />	...</beans>
+<beans>
+	<bean id="castorMarshaller" class="org.springframework.oxm.castor.CastorMarshaller" />
+	...
+</beans>
 ```
 
 ###17.6.2 映射
@@ -161,7 +239,11 @@ Castor XML 映射是一个开源的 XML 绑定框架。它允许使用者将包�
 
 映射文件可以通过 mapppingLocation 属性进行设置，如下是一个配置了 classpath 资源的示例：
 ```
-<beans>	<bean id="castorMarshaller" class="org.springframework.oxm.castor.CastorMarshaller" >		<property name="mappingLocation" value="classpath:mapping.xml" />	</bean></beans>
+<beans>
+	<bean id="castorMarshaller" class="org.springframework.oxm.castor.CastorMarshaller" >
+		<property name="mappingLocation" value="classpath:mapping.xml" />
+	</bean>
+</beans>
 ```
 
 ###17.6.3 基于 XML 架构的配置
@@ -189,7 +271,12 @@ JiBX 框架提供的解决方案思路与 Hibernate 对于 ORM 的解决方案�
 ###17.7.1 JibxMarshaller
 JiBXMarshaller 类同时实现了 Marshaller 和 Unmarshaller 接口。它需要使用者设置编组的目的类的类名才能正确工作。设置类名的属性是 targetClass。另外还有一个可选属性是 bingdingName，用户可以通过这个属性配置绑定名。接下来的示例中，我们将绑定 Flight 类：
 ```
-<beans>	<bean id="jibxFlightsMarshaller" class="org.springframework.oxm.jibx.JibxMarshaller">		<property name="targetClass">org.springframework.oxm.jibx.Flights</property>	</bean>	...</beans>
+<beans>
+	<bean id="jibxFlightsMarshaller" class="org.springframework.oxm.jibx.JibxMarshaller">
+		<property name="targetClass">org.springframework.oxm.jibx.Flights</property>
+	</bean>
+	...
+</beans>
 ```
 
 一个 JibxMarshaller 只能处理一个目的类与 XML 的相互转换，如果你需要编组多个类，你必需配置相应数量的 JibxMarshallers bean，然后在 targetClass 里面指定相应各个类的类名。
@@ -216,12 +303,24 @@ Xstream 是一个用于将对象与 XML 文档进行序列化与反序列化的�
 
 XstreamMarshaller 类不需进行任何配置便可直接在 applicationContext.xml 文件中直接配置成 bean 进行使用。不过你可以配置一个包含了字符串别名与类之间对应关系的 别名映射表  来实现对 XML 解析结果的自定义：
 ```
-<beans>	<bean id="xstreamMarshaller" class="org.springframework.oxm.xstream.XStreamMarshaller">		<property name="aliases">			<props>				<prop key="Flight">org.springframework.oxm.xstream.Flight</prop>			</props>		</property>	</bean>	...</beans>
+<beans>
+	<bean id="xstreamMarshaller" class="org.springframework.oxm.xstream.XStreamMarshaller">
+		<property name="aliases">
+			<props>
+				<prop key="Flight">org.springframework.oxm.xstream.Flight</prop>
+			</props>
+		</property>
+	</bean>
+	...
+</beans>
 ```
 
 Xstream 默认允许对任何类进行反编组操作，但这可能会导致安全隐患。因此不建议使用 XStreamMarshaller 对来源于外部（比如公网）的 XML 文档进行反编组。如果你坚持使用 XStreamMarshaller 反编组来自外部的 XML 文档，请如下例演示的一样设置 supportedClasses 属性：
 ```
-<bean id="xstreamMarshaller" class="org.springframework.oxm.xstream.XStreamMarshaller">	<property name="supportedClasses" value="org.springframework.oxm.xstream.Flight"/>	...</bean>
+<bean id="xstreamMarshaller" class="org.springframework.oxm.xstream.XStreamMarshaller">
+	<property name="supportedClasses" value="org.springframework.oxm.xstream.Flight"/>
+	...
+</bean>
 ```
 
 设置这一属性能够确保只有指定的类才能够被用于反编组。
