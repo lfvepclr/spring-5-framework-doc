@@ -121,4 +121,5 @@
 * [33. Spring框架的新功能](33-what-new-in-the-spring-framework.md)
 * [35-Spring-Annotation-Programming-Model](35-spring-annotation-programming-model.md)
 * [37. Spring AOP的经典用法](37-Spring_AOP_Usage.md)
+* [25-EJB](25-ejb.md)
 
