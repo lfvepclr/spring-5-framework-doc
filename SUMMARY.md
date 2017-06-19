@@ -54,7 +54,7 @@
   * [15.6 像Java对象那样操作JDBC](/15/15-6.md)
   * [15.7 参数和数据处理的常见问题](/15/15-7.md)
   * [15.8 内嵌数据库支持](/15/15-8.md)
-  * 1[5.9 初始化Datasource](/15/15-9.md)
+  * [5.9 初始化Datasource](/15/15-9.md)
 * [16. ORM和数据访问](/16/16.md)
   * [16.1 介绍一下Spring中的ORM](/16/16-1.md)
   * [16.2 集成ORM的注意事项](/16/16-2.md)
@@ -120,3 +120,5 @@
   * [32.8 如何设置 TTL/TTI/Eviction policy/XXX 功能?](/32/32-8.md)
 * [33. Spring框架的新功能](33-what-new-in-the-spring-framework.md)
 * [37. Spring AOP的经典用法](37-Spring_AOP_Usage.md)
+* [35-Spring-Annotation-Programming-Model](35-spring-annotation-programming-model.md)
+
