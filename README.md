@@ -14,10 +14,6 @@
 
 * [35. Spring注解编程模型](http://ifeve.com/annotation-programming-model/)
 
-* [37. Spring AOP的经典用法](http://ifeve.com/classic-aop-spring/)
-
-
-
 ## 待办：
 
 1. 完成“待整理列表”
