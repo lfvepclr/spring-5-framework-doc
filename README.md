@@ -8,8 +8,6 @@
 
 * [18. Web MVC 框架](http://ifeve.com/spring-18-web-mvc/)
 
-* [25. 整合EJB](http://ifeve.com/spring5-25-ejb/)
-
 ## 待办：
 
 1. 完成“待整理列表”
