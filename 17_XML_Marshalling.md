@@ -22,9 +22,9 @@ Spring 将所有编组操作抽象成了 org.springframework.oxm.Marshaller 中
 ```
 public interface Marshaller {
   /**
-	 * 将对象编组并存放在 Result 中.
- 	 */
-	void marshal(Object graph, Result result) throws XmlMappingException, IOException;
+    * 将对象编组并存放在 Result 中.
+    */
+  void marshal(Object graph, Result result) throws XmlMappingException, IOException;
 }
 ```
 
@@ -43,9 +43,9 @@ Marshaller 接口有一个主方法用于将一个给定对象编组为一个给
 ```
 public interface Unmarshaller {
    /**
-	 *  将来源 XML 反编组成一个对象
-	 */
-     	Object unmarshal(Source source) throws XmlMappingException, IOException;
+     *  将来源 XML 反编组成一个对象
+     */
+   Object unmarshal(Source source) throws XmlMappingException, IOException;
 }
 ```
 此接口同样也有一个方法，从 javax.xml.transform.Source （一个抽象的 XML 输入）读取 XML 数据，并返回一个相对应的 Java 对象。和 Result 接口一样，Source 是一个拥有三个具体实现的标记接口。每一个实现封装了一种 XML 表现形式。详见下表：
@@ -70,11 +70,11 @@ The O/X Mapping exception hierarchy is shown in the following figure:
 Spring 的 OXM 可被用于十分广泛的场景。在以下的例子中，我们将使用这一功能将一个由 Spring 管理的应用程序的配置编组为一个 XML 文件。我们用了一个简单的 JavaBean 来表示这些配置：
 ```
 public class Settings {
-private boolean fooEnabled;
-public boolean isFooEnabled() {
+	private boolean fooEnabled;
+	public boolean isFooEnabled() {
 		return fooEnabled;
 	}
-public void setFooEnabled(boolean fooEnabled) {
+	public void setFooEnabled(boolean fooEnabled) {
 		this.fooEnabled = fooEnabled;
 	}
 }
@@ -92,17 +92,20 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.oxm.Marshaller;
 import org.springframework.oxm.Unmarshaller;
 public class Application {
-private static final String FILE_NAME = "settings.xml";
+	private static final String FILE_NAME = "settings.xml";
 	private Settings settings = new Settings();
 	private Marshaller marshaller;
 	private Unmarshaller unmarshaller;
-public void setMarshaller(Marshaller marshaller) {
+	
+	public void setMarshaller(Marshaller marshaller) {
 		this.marshaller = marshaller;
 	}
-public void setUnmarshaller(Unmarshaller unmarshaller) {
+	
+	public void setUnmarshaller(Unmarshaller unmarshaller) {
 		this.unmarshaller = unmarshaller;
 	}
-public void saveSettings() throws IOException {
+	
+	public void saveSettings() throws IOException {
 		FileOutputStream os = null;
 		try {
 			os = new FileOutputStream(FILE_NAME);
@@ -113,7 +116,8 @@ public void saveSettings() throws IOException {
 			}
 		}
 	}
-public void loadSettings() throws IOException {
+	
+	public void loadSettings() throws IOException {
 		FileInputStream is = null;
 		try {
 			is = new FileInputStream(FILE_NAME);
@@ -124,7 +128,8 @@ public void loadSettings() throws IOException {
 			}
 		}
 	}
-public static void main(String[] args) throws IOException {
+	
+	public static void main(String[] args) throws IOException {
 		ApplicationContext appContext =
 				new ClassPathXmlApplicationContext("applicationContext.xml");
 		Application application = (Application) appContext.getBean("application");
