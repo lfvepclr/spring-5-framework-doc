@@ -10,8 +10,6 @@
 
 * [25. 整合EJB](http://ifeve.com/spring5-25-ejb/)
 
-* [27. JMX](http://ifeve.com/《spring-5官方文档》-jmx/)
-
 * [35. Spring注解编程模型](http://ifeve.com/annotation-programming-model/)
 
 ## 待办：
