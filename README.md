@@ -16,6 +16,14 @@
 
 * [37. Spring AOP的经典用法](http://ifeve.com/classic-aop-spring/)
 
+
+
+## 待办：
+
+1. 完成“待整理列表”
+2. 文档中代码高亮
+3. 文档中加入评论功能，方便反馈文档错误
+
 ## Contributors
 
 Spring 16:[EthanPark](http://blog.csdn.net/ethanwhite)
