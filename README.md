@@ -10,8 +10,6 @@
 
 * [25. 整合EJB](http://ifeve.com/spring5-25-ejb/)
 
-* [35. Spring注解编程模型](http://ifeve.com/annotation-programming-model/)
-
 ## 待办：
 
 1. 完成“待整理列表”
