@@ -7,18 +7,23 @@
 使用 Spring 提供的支持来实现你的 O/X 映射需求具有如下一些好处：
 
 ###17.1.1 便于配置
+
 Spring 的 bean 工厂使得无需构建 JAXB 上下文、JiBX 绑定工厂就可以配置编组器。你可以像配置你的应用中任何一个 Spring bean 一样地配置编组器。另外，相当一部分编组器可以使用基于 XML 架构的配置来进行设置，这让配置工作变得更为容易。
 
 ###17.1.2 一致的接口
+
 Spring 的 O/X 映射通过两个全局的接口来执行操作：Marshaller 和 Unmarshaller。这一结构让用户可以在几乎不需要修改编组操作类的前提下，轻易地在不同的 O/X 映射框架之间进行切换。这一结构的另一优势是可以以一种非侵入的方式在代码中混合多种 XML 编组方法（比如有一些编组实现使用 JAXB，而另一些则使用 Castor），从而将各种技术的优势在应用中加以综合利用。
 
 ###17.1.3 一致的异常继承
+
 Spring 对来自底层 O/X 映射工具的异常进行了转换，以 XmlMappingException 的形式使之成为 Spring 自身异常继承体系的一部分。这些 Spring 运行时异常将初始异常封装其中，因此所有异常信息都会被完整地保留下来。
 
 ##17.2 编组器与反编组器
+
 就如在“简介”中提到的，一个编组器负责将一个对象序列化成 XML，而一个反编组器则将 XML 流反序列化为一个对象。我们将在本节对 Spring 提供的两个相关接口进行描述。
 
 ###17.2.1 编组器
+
 Spring 将所有编组操作抽象成了 org.springframework.oxm.Marshaller 中的方法，以下是该接口最主要的一个方法：
 ```
 public interface Marshaller {
@@ -40,6 +45,7 @@ Marshaller 接口有一个主方法用于将一个给定对象编组为一个给
 尽管 marshal() 方法的第一个参数只是一个简单对象，但大多数 Marshaller 实现并不真的能处理任意类型的对象。要么这个对象必须在映射文件中定义过映射关系，要么被注解所修饰，要么在编组器中进行过注册，要么与编组器实现拥有共同的基类。参考后面的章节来确定你所选用的 O/X 技术实现具体是怎么做的。
 
 ###17.2.2 反编组器
+
 与 Marshaller 接口相对应，还有一个 org.springframework.oxm.Unmarshaller 接口。
 ```
 public interface Unmarshaller {
@@ -58,6 +64,7 @@ public interface Unmarshaller {
 | StreamSource | java.io.File, java.io.OutputStream, or java.io.Writer |
 
 ###17.2.3 XmlMappingException
+
 Spring 对来自底层 O/X 映射工具的异常进行了转换，以 XmlMappingException 的形式使之成为 Spring 自身异常继承体系的一部分。 这些 Spring 运行时异常将初始异常封装其中，因此所有异常信息都会被完整地保留下来。
 额外地，虽然底层的 O/X 映射工具并未提供支持，但 MarshallingFailureException 和 UnmarshallingFailureException 让编组与反编组操作中产生的异常得以能够被区分开来。
 The O/X Mapping exception hierarchy is shown in the following figure:
@@ -68,6 +75,7 @@ The O/X Mapping exception hierarchy is shown in the following figure:
 
 
 ##17.3 Marshaller 与 Unmarshaller 的使用
+
 Spring 的 OXM 可被用于十分广泛的场景。在以下的例子中，我们将使用这一功能将一个由 Spring 管理的应用程序的配置编组为一个 XML 文件。我们用了一个简单的 JavaBean 来表示这些配置：
 ```
 public class Settings {
@@ -160,6 +168,7 @@ public class Application {
 ```
 
 ##17.4 基于 XML 架构的配置
+
 可以使用来自 OXM 命名空间的 XML 标签是对编组器的配置变得更简洁。要使用这些标签，请在 XML 文件开头引用恰当的 XML 架构。以下是一个引用 oxm 的示例，请注意粗体字部分：
 ```
 <?xml version="1.0" encoding="UTF-8"?>
@@ -183,11 +192,13 @@ public class Application {
 ```
 
 ##17.5 JAXB
+
 JAXB 绑定编译器将 W3C XML 架构实现为一到数个 Java 类，一个 jaxb.properties 文件，可能还会有数个资源文件。JAXB 同时还支持从被注解的 Java 类生成 XML 架构。
 
 Spring 支持基于 17.2 Marshaller 和 Unmarshaller 所提到的 Marshaller 和 Unmarshaller 结构实现的 JAXB 2.0 API 编组策略。相应的类文件都定义在   org.springframework.oxm.jaxb 包下面。
 
 ###17.5.1 Jaxb2Marshaller
+
 Jaxb2Marshaller 类同时实现了 Marshaller 和 Unmarshaller 接口。这个类需要上下文路径以正常运作，你可以通过 contextPath 属性来设置。上下文路径是一组由冒号（：）分隔的 Java 包名。这些包下面包含了由 XML 架构所生成的对应 Java 类。另外你可以通过设置一个叫 classesToBeBound 的属性来配置一组可以被编组器支持的类。架构的验证则通过向 bean 中配置一到多个 XML 架构的 xsd 文件资源来实现。下面是一个 bean 的配置示例：
 ```
 <beans>
@@ -205,6 +216,7 @@ Jaxb2Marshaller 类同时实现了 Marshaller 和 Unmarshaller 接口。这个�
 ```
 
 ###17.5.2 基于 XML 架构的配置
+
 Jaxb2-marshaller 标签 配置了一个 org.springframework.oxm.jaxb.Jaxb2Marshaller 实例。以下是一个配置实例：
 ```
 <oxm:jaxb2-marshaller id="marshaller" contextPath="org.springframework.ws.samples.airline.schema"/>
@@ -227,11 +239,13 @@ Jaxb2-marshaller 标签 配置了一个 org.springframework.oxm.jaxb.Jaxb2Marsha
 |contextPath|JAXB上下文路径|no|
 
 ##17.6 Castor
+
 Castor XML 映射是一个开源的 XML 绑定框架。它允许使用者将包含在一个 Java 对象模型中的数据转换成 XML 文档，或者反之。Castor 默认并不需要额外的配置就可以使用。但如果使用者希望能够对框架行为拥有更多的控制，则可以通过在配置中引入一个映射文件来达到这一目的。
 
 读者可以从 Castor 的项目主页上了解更多相关内容。Spring 对这一框架的集成代码都在 org.springframework.oxm.castor 包底下。
 
 ###17.6.1 CastorMarshaller
+
 与 JAXB 类似，CastorMarshaller 类同时实现了 Marshaller 和 Unmarshaller 接口。它可以通过以下配置来被引用：
 ```
 <beans>
@@ -241,6 +255,7 @@ Castor XML 映射是一个开源的 XML 绑定框架。它允许使用者将包�
 ```
 
 ###17.6.2 映射
+
 尽管 Castor 的默认编组行为基本能够适应大部分应用场景，有时候还是需要一些自定义的能力。这一需求可以通过使用一个 Castor 的映射文件来实现。更多信息请参考 Castor XML Mapping。
 
 映射文件可以通过 mapppingLocation 属性进行设置，如下是一个配置了 classpath 资源的示例：
@@ -253,6 +268,7 @@ Castor XML 映射是一个开源的 XML 绑定框架。它允许使用者将包�
 ```
 
 ###17.6.3 基于 XML 架构的配置
+
 一个 castor-marshaller 代表了一个 org.springframework.oxm.castor.CastorMarshaller 实例。示例如下：
 <oxm:castor-marshaller id="marshaller" mapping-location="classpath:org/springframework/oxm/castor/mapping.xml"/>
 
@@ -270,11 +286,13 @@ Castor XML 映射是一个开源的 XML 绑定框架。它允许使用者将包�
 |mapping-location|Castor XML 映射文件的位置|no|
 
 ##17.7 JiBX
+
 JiBX 框架提供的解决方案思路与 Hibernate 对于 ORM 的解决方案思路类似：通过一个绑定定义指定了你的 Java 对象与 XML 文件之间互相转换的规则。在准备好绑定并编译了类文件后，一个 JiBX 编译器将会对编译好的类文件进行增强，在其中加入一些辅助代码，并自动添加用于处理在类实例与 XML 文档之间相互转换的操作代码。
 
 请参考 [JiBX官方网站](http://jibx.sourceforge.net/) 来了解更多信息。Spring 对于框架的集成代码则都在 org.springframework.oxm.jibx 包下面。
 
 ###17.7.1 JibxMarshaller
+
 JiBXMarshaller 类同时实现了 Marshaller 和 Unmarshaller 接口。它需要使用者设置编组的目的类的类名才能正确工作。设置类名的属性是 targetClass。另外还有一个可选属性是 bingdingName，用户可以通过这个属性配置绑定名。接下来的示例中，我们将绑定 Flight 类：
 ```
 <beans>
@@ -289,6 +307,7 @@ JiBXMarshaller 类同时实现了 Marshaller 和 Unmarshaller 接口。它需要
 
 
 ###17.7.2 基于 XML 的配置
+
 jibx-marshaller 标签配置了  org.springframework.oxm.jibx.JibxMarshaller 的实例。以下是一个示例：
 ```
 <oxm:jibx-marshaller id="marshaller" target-class="org.springframework.ws.samples.airline.schema.Flight"/>
@@ -303,6 +322,7 @@ jibx-marshaller 标签配置了  org.springframework.oxm.jibx.JibxMarshaller �
 |bindingName|此编组器使用的绑定名 |no|
 
 ##17.8 XStream
+
 Xstream 是一个用于将对象与 XML 文档进行序列化与反序列化的简单类库。它不需要任何映射关系，并且会生成整齐的 XML 文档。
 
 请参考 [XStream](https://x-stream.github.io/) 的项目主页以获取更多信息。Spring 对此框架的集成代码都在 org.springframework.oxm.xstream 包下面。
