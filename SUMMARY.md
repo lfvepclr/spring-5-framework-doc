@@ -82,6 +82,7 @@
   * [24.8 不实现远程接口自动检测](/24/24-8.md)
   * [24.9 选择技术时的注意事项](/24/24-9.md)
   * [24.10 在客户端访问RESTful服务](/24/24-10.md)
+* [25. 整合EJB](25-ejb.md)
 * [26. JMS](/26/26.md)
   * [26.1 介绍](/26/26-1.md)
   * [26.2 Spring JMS的使用](/26/26-2.md)
@@ -121,5 +122,4 @@
 * [33. Spring框架的新功能](33-what-new-in-the-spring-framework.md)
 * [35-Spring-Annotation-Programming-Model](35-spring-annotation-programming-model.md)
 * [37. Spring AOP的经典用法](37-Spring_AOP_Usage.md)
-* [25-EJB](25-ejb.md)
 
