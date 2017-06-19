@@ -36,7 +36,7 @@
 
 ### Stereotype注解
 
-_`译者注：保留Stereotype原生词汇；可理解为模式化注解、角色类注解。`_
+`译者注：保留Stereotype原生词汇；可理解为模式化注解、角色类注解。`
 
 Stereotype注解是一种在应用中，常被用于声明要扮演某种职责或者角色的注解。例如，`@Repository`注解用于标注任何履行了repository职责角色的类（这种职责角色通常也会被称为Data Access Object或者DAO）。
 
@@ -72,7 +72,7 @@ _**Attribute Override**_（成员覆盖）是注解的一个成员覆盖另一�
 
 ### Spring Composed
 
-_`译者注：Spring Composed项目是spring的一个社区项目，内含一些有特色的组合注解。可点击下文中的链接下载源码`_
+`译者注：Spring Composed项目是spring的一个社区项目，内含一些有特色的组合注解。可点击下文中的链接下载源码`
 
 [Spring Composed](https://github.com/sbrannen/spring-composed)项目是可以在在spring4.2.1和更高版本中使用的一系列组合注解。你可以在Spring MVC使用像`@Get`,`@Post`,`@Put`, 和`@Delet`这样的注解，也可以在Spring MVC REST应用中使用`@GetJson`,`@PostJson`等等注解。
 
@@ -158,7 +158,7 @@ public @interface MyTestConfig {
 * `org.springframework.web.portlet.bind.annotation.ActionMapping`
 * `org.springframework.web.portlet.bind.annotation.RenderMapping`
 
-## 待发掘主题_`(译者注：课后习题-_-!)`_
+## 待发掘主题_\`\(译者注：课后习题-_-!\)\`\_
 
 * 记述 注解和标注了注解和元注解的类、接口、成员方法、成员变量、参数的通用搜索算法。
   * 如果一个注解既是以注解又是以元注解的方式标注了一个元素会发生什么呢？

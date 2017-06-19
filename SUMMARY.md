@@ -119,6 +119,6 @@
   * [32.7 插入不同的后端缓存](/32/32-7.md)
   * [32.8 如何设置 TTL/TTI/Eviction policy/XXX 功能?](/32/32-8.md)
 * [33. Spring框架的新功能](33-what-new-in-the-spring-framework.md)
-* [37. Spring AOP的经典用法](37-Spring_AOP_Usage.md)
 * [35-Spring-Annotation-Programming-Model](35-spring-annotation-programming-model.md)
+* [37. Spring AOP的经典用法](37-Spring_AOP_Usage.md)
 
